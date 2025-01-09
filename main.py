@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from pipeline.api import pdf_processing
+from api import pdf_processing
 
 app = FastAPI(
     title="Document Processing API",

@@ -1,0 +1,31 @@
+project-root/
+├── api/                        # API layer for endpoints
+│   ├── __init__.py
+│   ├── pdf_processing
+├── backend/                    # Core logic for processing
+│   ├── __init__.py
+│   ├── structure_json.py
+│   ├── image_extractor.py
+│   ├── text_extractor.py
+├── models/                     # ML models, embeddings, or pretrained components
+│   ├── __init__.py
+│   ├── base_ocr_model.py
+│   ├── summarization_model.py
+│   ├── tesseract_ocr_model.py
+├── example/                     # Static assets
+│   └── sample_pdfs
+│   └── sample_pics
+├── tests/                      # Test cases
+│   ├── __init__.py
+│   ├── test_api/               # API tests
+│   │   ├── test_pdf_processing.py
+│   ├── test_backend/           # Backend logic tests
+│   │   ├── test_text_extractor.py
+│   │   ├── test_image_extractor.py
+│   │   └── test_processor.py
+│   └── test_integration.py     # Integration tests for the entire pipeline at the end
+├── structure.txt
+├── dockerfile                     # ask Lukas later
+├── requirements.txt
+├── main.py
+└── README.md
