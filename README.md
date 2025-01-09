@@ -1,8 +1,8 @@
-# MediLink AI  
+# MediLink  
 An Intelligent Pipeline for Medical Document Processing  
 
 ## Overview  
-MediLink AI is an automated, intelligent pipeline designed to streamline medical data management. It leverages computer vision and natural language processing (NLP) to extract, process, and structure information from PDF medical documents. This tool facilitates efficient handling of text and images, offering an organized, JSON-based output to support healthcare workflows.
+MediLink is an automated, intelligent pipeline designed to streamline medical data management. It leverages computer vision and natural language processing (NLP) to extract, process, and structure information from PDF medical documents. This tool facilitates efficient handling of text and images, offering an organized, JSON-based output to support healthcare workflows.
 
 ---
 
