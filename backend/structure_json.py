@@ -1,6 +1,6 @@
 from pathlib import Path
 from PIL import Image
-from backend.text_extractor_old import extract_text_and_summarize
+from backend.text_extractor import extract_text_and_summarize
 from backend.image_extractor import PdfImageTextExtractor
 import logging
 

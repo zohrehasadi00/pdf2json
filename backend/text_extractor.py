@@ -1,5 +1,6 @@
 import pdfplumber
 from pathlib import Path
+import json
 from typing import List, Dict
 from models.summarization_model import SummarizationModel
 
@@ -14,11 +15,19 @@ def extract_text_and_summarize(file_path: Path) -> List[Dict]:
 
     try:
         with pdfplumber.open(file_path) as pdf:
+
+            if not pdf.pages:
+                raise ValueError(f"The PDF file '{file_path}' has no pages.")
+
             for page_no, page in enumerate(pdf.pages, start=1):
                 try:
                     text = page.extract_text()
                     if text:
-                        summary = summarizer.summarize(text, max_length=130, min_length=50)
+                        try:
+                            summary = summarizer.summarize(text, max_length=130, min_length=50)
+                        except Exception as e:
+                            print(e)
+                            summary = "Was not possible"
                     else:
                         text = "No text available"
                         summary = "No summary available"
@@ -39,3 +48,6 @@ def extract_text_and_summarize(file_path: Path) -> List[Dict]:
     print(formated_result)
 
     return result
+#pdf_path = Path(r"C:/Users/zohre/OneDrive/Desktop/bachelorArbeit/pdf_example/The_Basics_of_Anesthesia_7th_Edition.pdf")
+#output = extract_text_and_summarize(pdf_path)
+## TODO: remove formated_result
