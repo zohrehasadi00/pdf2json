@@ -1,6 +1,6 @@
 import pytest
 from pathlib import Path
-from backend.text_extractor import extract_text_and_summarize
+from backend.text_extractor_old import extract_text_and_summarize
 
 
 # Use a real PDF file for testing

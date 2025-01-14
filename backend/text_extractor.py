@@ -35,14 +35,7 @@ def extract_text_and_summarize(file_path: Path) -> List[Dict]:
     except Exception as e:
         raise Exception(f"Error extracting text: {str(e)}")
 
+    formated_result = "\n".join(json.dumps(item, indent=4) for item in result)
+    print(formated_result)
+
     return result
-
-
-# if __name__ == "__main__":
-#     pdf_path = Path(
-#         r"C:/Users/zohre/OneDrive/Desktop/bachelorArbeit/pdf_example/The_Basics_of_Anesthesia_7th_Edition.pdf")
-#     try:
-#         output = extract_text_and_summarize(pdf_path)
-#         print(output)
-#     except Exception as e:
-#         print(f"Error: {e}")

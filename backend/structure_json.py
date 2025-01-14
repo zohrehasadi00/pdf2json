@@ -1,7 +1,8 @@
 from pathlib import Path
 from PIL import Image
-from text_extractor import extract_text_and_summarize
-from image_extractor import PdfImageTextExtractor
+from backend.text_extractor_old import extract_text_and_summarize
+from backend.image_extractor import PdfImageTextExtractor
+import logging
 
 
 def process_pdf_text_only(file_path: Path) -> dict:
@@ -43,51 +44,56 @@ def process_pdf_text_only(file_path: Path) -> dict:
 
 
 def process_pdf_image_only(file_path: Path) -> dict:
-    result = {
-        "Status": "Success",
-        "Title": file_path.name,
-        "Pages": []
-    }
+    """
+    Processes a PDF file to extract images and text from images, returning a structured JSON response.
 
+    Args:
+        file_path (Path): Path to the PDF file.
+
+    Returns:
+        dict: A dictionary containing the extraction status, title, and page data.
+    """
     try:
+        # Initialize the image text extractor
         pdf_image_extractor = PdfImageTextExtractor()
+
+        # Extract images and text from the PDF
         extracted_pages = pdf_image_extractor.extract_images(file_path)
 
-        for page in extracted_pages:
-            page_number = page.get("PageNumber")
-            images = page.get("Images", [])
-
-            if not images:
-                continue
-
-            page_data = {
-                "Page": f"Page {page_number}",
-                "Images": []
-            }
-
-            for image in images:
-                image_obj = image.get("Image")
-
-                if not isinstance(image_obj, Image.Image):
-                    continue
-
-                try:
-                    image_base64 = pdf_image_extractor.image_to_base64(image_obj)
-                    extracted_text = pdf_image_extractor.extract_text_from_image(image_obj)
-
-                    page_data["Images"].append({
-                        "Base64": image_base64,
-                        "ExtractedText": extracted_text
-                    })
-                except Exception as e:
-                    page_data["Images"].append({
-                        "Error": f"Error processing image: {str(e)}"
-                    })
-
-            result["Pages"].append(page_data)
+        # Build JSON response
+        result = {
+            "Status": "Success",
+            "Title": file_path.name,
+            "Pages": [
+                {
+                    "Page": f"Page {page.get('PageNumber')}",
+                    "Images": [
+                        {
+                            "Base64": image.get("Base64Image"),
+                            "ExtractedText": image.get("ExtractedText")
+                        }
+                        for image in page.get("Images", [])
+                    ],
+                }
+                for page in extracted_pages
+            ],
+        }
 
     except Exception as e:
-        result["Status"] = "Error"
-        result["ErrorMessage"] = f"Error extracting images: {str(e)}"
+        logging.error(f"Error processing PDF file: {file_path}")
+        result = {
+            "Status": "Error",
+            "ErrorMessage": f"Error extracting images: {str(e)}",
+            "Title": file_path.name,
+            "Pages": [],
+        }
 
     return result
+
+
+pdf_path = Path(r"C:/Users/zohre/OneDrive/Desktop/bachelorArbeit/pdf_example/The_Basics_of_Anesthesia_7th_Edition.pdf")
+process_pdf_text_only(pdf_path)
+print("********************************************************************")
+print("********************************************************************")
+print("********************************************************************")
+(process_pdf_image_only(pdf_path))

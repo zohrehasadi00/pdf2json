@@ -26,3 +26,5 @@ def health_check():
     Health check endpoint to verify the API is running.
     """
     return {"status": "OK", "message": "The API is up and running!"}
+
+# TODO: API doesnt connect
