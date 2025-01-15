@@ -6,7 +6,6 @@ import logging
 from pathlib import Path
 from models.tesseract_ocr_model import TesseractOcrModel
 from models.base_ocr_model import BaseOcrModel
-import json
 import PyPDF2
 
 
@@ -56,21 +55,21 @@ class PdfImageTextExtractor:
             file_path (Path): The file path to the PDF document.
 
         Returns:
-            List[Dict]: A list of dictionaries containing Base64 images and extracted text.
+            List[Dict]: A list of dictionaries, each representing a page with grouped images.
         """
-        images = []
+        pages = []
         try:
             with open(file_path, "rb") as f:
                 reader = PyPDF2.PdfReader(f)
 
-                # Iterate over all pages
                 for page_number, page in enumerate(reader.pages, 1):
                     resources = page.get("/Resources")
                     if not resources or "/XObject" not in resources:
-                        logging.warning(f"No images found on page {page_number}.")
                         continue
 
                     xObject = resources["/XObject"].get_object()
+                    page_images = {}
+                    image_count = 1
 
                     for obj_name in xObject:
                         obj = xObject[obj_name]
@@ -84,18 +83,25 @@ class PdfImageTextExtractor:
                             base64_image = self.image_to_base64(image)
                             extracted_text = self.extract_text_from_image(image)
 
-                            # Append results for this image
-                            images.append({
-                                "Page": f"Page {page_number}",
+                            # Store the image and its data under keys like image1, image2, etc.
+                            page_images[f"image{image_count}"] = {
                                 "Base64Image": base64_image,
                                 "ExtractedText": extracted_text
-                            })
+                            }
+                            image_count += 1
+
+                    if page_images:
+                        pages.append({
+                            "Page": f"Page {page_number}",
+                            **page_images  # Add the images as individual keys
+                        })
 
         except Exception as e:
             logging.error(f"Error extracting images from PDF {file_path}: {str(e)}")
-        formated_result = "\n".join(json.dumps(item, indent=4) for item in images)
-        print(formated_result)
-        return images
+
+        return pages
+
+
 
     def extract_text_from_image(self, image: Image.Image) -> str:
         """
@@ -126,7 +132,6 @@ class PdfImageTextExtractor:
             str: The Base64-encoded string, or an empty string on failure.
         """
         try:
-            # Ensure the image is in RGB mode for consistent encoding
             if image.mode == "CMYK":
                 image = image.convert("RGB")
 

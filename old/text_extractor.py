@@ -22,8 +22,6 @@ def extract_text_and_summarize(file_path: Path) -> List[Dict]:
                 if page_no == 2:
                     a = page.extract_text()
                     b = summarizer.summarize(a, max_length=150, min_length=50)
-                    #print(f"This is page two: {a}")
-                    print(f"This is summary two: {b}")
 
                 try:
                     text = page.extract_text()
@@ -47,12 +45,4 @@ def extract_text_and_summarize(file_path: Path) -> List[Dict]:
                     summary = "No summary available"
     except Exception as e:
         raise Exception(f"Error extracting text: {str(e)}")
-
-    #formated_result = "\n".join(json.dumps(item, indent=4) for item in result)
-    #print(formated_result)
     return result
-
-
-pdf_path = Path(r"C:/Users/zohre/OneDrive/Desktop/bachelorArbeit/pdf_example/The_Basics_of_Anesthesia_7th_Edition.pdf")
-output = extract_text_and_summarize(pdf_path)
-# TODO: remove formated_result

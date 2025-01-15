@@ -1,5 +1,4 @@
-from pathlib import Path
-from backend.structure_json import process_pdf_text_only
+from old.structure_json import process_pdf_text_only
 
 def test_process_pdf_text_only(tmp_path):
     pdf_path = tmp_path / "test.pdf"

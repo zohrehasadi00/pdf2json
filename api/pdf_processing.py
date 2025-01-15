@@ -1,8 +1,7 @@
 from pathlib import Path
 from fastapi import APIRouter, UploadFile, HTTPException
 from fastapi.responses import JSONResponse
-from backend.structure_json import process_pdf_text_only
-from backend.structure_json import process_pdf_image_only
+from backend.structure_json import process_pdf
 import os
 import tempfile
 import shutil
@@ -26,7 +25,7 @@ async def extract_text_from_pdf(file: UploadFile):
             temp_file.write(await file.read())
         print(temp_file_path)
         result = {"Status": "Success", "Pages": []}
-        text_result = process_pdf_text_only(temp_file_path)
+        text_result = process_pdf(temp_file_path)
         image_result = {"Pages": []}
 
         for text_page, image_page in zip(text_result["Pages"], image_result["Pages"]):

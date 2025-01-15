@@ -1,6 +1,5 @@
 import pdfplumber
 from pathlib import Path
-import json
 from typing import List, Dict
 from models.summarization_model import SummarizationModel
 
@@ -24,10 +23,10 @@ def extract_text_and_summarize(file_path: Path) -> List[Dict]:
                     text = page.extract_text()
                     if text:
                         try:
-                            summary = summarizer.summarize(text, max_length=130, min_length=50)
+                            summary = summarizer.summarize(text, max_length=150, min_length=50)
                         except Exception as e:
                             print(e)
-                            summary = "Was not possible"
+                            summary = "An error occurred and summary was not possible"
                     else:
                         text = "No text available"
                         summary = "No summary available"
@@ -43,11 +42,4 @@ def extract_text_and_summarize(file_path: Path) -> List[Dict]:
 
     except Exception as e:
         raise Exception(f"Error extracting text: {str(e)}")
-
-    formated_result = "\n".join(json.dumps(item, indent=4) for item in result)
-    print(formated_result)
-
     return result
-#pdf_path = Path(r"C:/Users/zohre/OneDrive/Desktop/bachelorArbeit/pdf_example/The_Basics_of_Anesthesia_7th_Edition.pdf")
-#output = extract_text_and_summarize(pdf_path)
-## TODO: remove formated_result
