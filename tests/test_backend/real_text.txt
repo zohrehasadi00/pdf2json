@@ -1,0 +1,17 @@
+real_text = """
+See discussions, stats, and author profiles for this publication at: https://www.researchgate.net/publication/329345802
+The Basics of Anesthesia, 7th Edition.
+Article in Anesthesiology · December 2018
+DOI: 10.1097/ALN.0000000000002432
+CITATION
+1
+READS
+387
+2 authors, including:
+Stephen J Kimatian
+University of Texas Southwestern Medical Center
+40 PUBLICATIONS 436 CITATIONS
+SEE PROFILE
+All content following this page was uploaded by Stephen J Kimatian on 18 February 2021.
+The user has requested enhancement of the downloaded file.
+"""
