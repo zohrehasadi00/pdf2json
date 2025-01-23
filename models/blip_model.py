@@ -41,33 +41,3 @@ class BlipModel:
         except Exception as e:
             logging.error(f"Error generating caption: {str(e)}")
             return "Error generating caption."
-
-# import base64
-# from PIL import Image
-# from io import BytesIO
-# from transformers import BlipProcessor, BlipForConditionalGeneration
-#
-# # Initialize BLIP processor and model for image captioning
-# processor = BlipProcessor.from_pretrained("Salesforce/blip-image-captioning-base")
-# model = BlipForConditionalGeneration.from_pretrained("Salesforce/blip-image-captioning-base")
-#
-#
-# def generate_caption(image_base64):
-#     """
-#     Generate a caption for an image given in base64 format using BLIP.
-#
-#     Args:
-#     - image_base64 (str): Base64-encoded image string.
-#
-#     Returns:
-#     - caption (str): Generated caption for the image.
-#     """
-#     img_bytes = base64.b64decode(image_base64)
-#     img = Image.open(BytesIO(img_bytes))
-#
-#     inputs = processor(images=img, return_tensors="pt")
-#     out = model.generate(**inputs)
-#
-#     # Decode the output to get the caption
-#     caption = processor.decode(out[0], skip_special_tokens=True)
-#     return caption
