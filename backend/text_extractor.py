@@ -1,9 +1,10 @@
 import pdfplumber
 from pathlib import Path
 from typing import List, Dict
-from models.summarization_model import SummarizationModel
+from models.longformer_model import long_summarization
 
-summarizer = SummarizationModel()
+# Facebook's BART # limitation: 1024 token
+# summarizer = SummarizationModel()
 
 
 def extract_text_and_summarize(file_path: Path) -> List[Dict]:
@@ -19,11 +20,20 @@ def extract_text_and_summarize(file_path: Path) -> List[Dict]:
                 raise ValueError(f"The PDF file '{file_path}' has no pages.")
 
             for page_no, page in enumerate(pdf.pages, start=1):
+
                 try:
                     text = page.extract_text()
                     if text:
                         try:
-                            summary = summarizer.summarize(text, max_length=150, min_length=50)
+                            # Facebook's BART
+                            # summary = summarizer.summarize(text, max_length=150, min_length=50)
+
+                            # LED summarization # slow
+                            # summary = led_summarization(text)
+
+                            # Longformer summarization # better
+                            summary = long_summarization(text)
+
                         except Exception as e:
                             print(e)
                             summary = "An error occurred and summary was not possible"
@@ -33,7 +43,7 @@ def extract_text_and_summarize(file_path: Path) -> List[Dict]:
                 except Exception as page_error:
                     text = f"Error reading page: {page_error}"
                     summary = "No summary available"
-
+                
                 result.append({
                     "PageNumber": page_no,
                     "Text": text,

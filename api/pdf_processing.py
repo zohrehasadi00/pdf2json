@@ -11,15 +11,14 @@ router = APIRouter()
 
 @router.post("/text", tags=["Text Processing"])
 async def extract_text_from_pdf(file: UploadFile):
-    print("its in")
     if not file.filename.endswith(".pdf"):
         raise HTTPException(status_code=400, detail="Only PDF files are supported.")
-    print("1")
+
     # virtual copy
     temp_dir = tempfile.mkdtemp()
-    print("2")
+
     temp_file_path = Path(temp_dir) / file.filename
-    print("test test")
+
     try:
         with open(temp_file_path, "wb") as temp_file:
             temp_file.write(await file.read())

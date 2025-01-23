@@ -82,5 +82,5 @@ def process_pdf(file_path: Path) -> dict:
 
 # pdf_path = Path(r"C:/Users/zohre/OneDrive/Desktop/bachelorArbeit/pdf_example/The_Basics_of_Anesthesia_7th_Edition.pdf") # not bad
 # pdf_path = Path(r"C:\Users\zohre\OneDrive\Desktop\bachelorArbeit\pdf_example\test.pdf") #good
-pdf_path = Path(r"C:\Users\zohre\OneDrive\Desktop\bachelorArbeit\pdf_example\IntroductionToAnaesthesia.pdf")
-process_pdf(pdf_path)
+# pdf_path = Path(r"C:\Users\zohre\OneDrive\Desktop\bachelorArbeit\pdf_example\IntroductionToAnaesthesia.pdf")
+# process_pdf(pdf_path)

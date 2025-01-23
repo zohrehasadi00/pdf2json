@@ -1,8 +1,7 @@
 import PyPDF2
 from pathlib import Path
 from typing import List, Dict
-from models.summarization_model import SummarizationModel
-import json
+from old.summarization_model import SummarizationModel
 
 summarizer = SummarizationModel()
 
