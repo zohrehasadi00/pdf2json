@@ -1,55 +1,42 @@
+import os
+import json
+os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
+
 import pdfplumber
 from pathlib import Path
 from typing import List, Dict
-from models.longformer_model import long_summarization
+from models.longformer_model import summarization
+import logging
+import time
+from datetime import timedelta
+from concurrent.futures import ProcessPoolExecutor  # Change to ProcessPoolExecutor
+import multiprocessing
 
-# Facebook's BART # limitation: 1024 token
-# summarizer = SummarizationModel()
+# Configure logging
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-def extract_text_and_summarize(file_path: Path) -> List[Dict]:
-    result = []
-
-    if not file_path.exists() or not file_path.is_file():
-        raise FileNotFoundError(f"File not found: {file_path}")
+def extract_text_and_summarize(page, page_no) -> Dict:
+    logging.info(f"Starting text extraction and summarization for: {page_no}")
+    start_time = time.perf_counter()
 
     try:
-        with pdfplumber.open(file_path) as pdf:
+        text = page.extract_text()
+        if text:
+            try:
+                summary = summarization(text)
+            except Exception as e:
+                logging.error(f"Error summarizing text on page {page_no}: {str(e)}")
+                summary = "An error occurred and summary was not possible"
+        else:
+            logging.warning(f"No text found on page {page_no}")
+            text = "No text available"
+            summary = "No summary available"
 
-            if not pdf.pages:
-                raise ValueError(f"The PDF file '{file_path}' has no pages.")
-
-            for page_no, page in enumerate(pdf.pages, start=1):
-
-                try:
-                    text = page.extract_text()
-                    if text:
-                        try:
-                            # Facebook's BART
-                            # summary = summarizer.summarize(text, max_length=150, min_length=50)
-
-                            # LED summarization # slow
-                            # summary = led_summarization(text)
-
-                            # Longformer summarization # better
-                            summary = long_summarization(text)
-
-                        except Exception as e:
-                            print(e)
-                            summary = "An error occurred and summary was not possible"
-                    else:
-                        text = "No text available"
-                        summary = "No summary available"
-                except Exception as page_error:
-                    text = f"Error reading page: {page_error}"
-                    summary = "No summary available"
-                
-                result.append({
-                    "PageNumber": page_no,
-                    "Text": text,
-                    "Summary": summary,
-                })
-
-    except Exception as e:
-        raise Exception(f"Error extracting text: {str(e)}")
-    return result
+        duration = timedelta(seconds=time.perf_counter() - start_time)
+        logging.info(f"Summarization took: {duration}")
+    except Exception as page_error:
+        logging.error(f"Error extracting text or reading page {page_no}: {str(page_error)}")
+        text = f"Error reading page: {page_error}"
+        summary = "No summary available"
+    return {"PageNumber": page_no, "Text": text, "Summary": summary}

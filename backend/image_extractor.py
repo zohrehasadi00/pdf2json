@@ -1,3 +1,6 @@
+import os
+import json
+os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 from PIL import Image
 from typing import List, Dict
 import base64
@@ -10,6 +13,7 @@ import PyPDF2
 from sklearn.metrics.pairwise import cosine_similarity
 from sentence_transformers import SentenceTransformer
 from models.blip_model import BlipModel
+import pdfplumber
 
 blip = BlipModel()
 
@@ -109,6 +113,7 @@ class PdfImageTextExtractor:
 
         return pages
 
+
     def extract_text_from_image(self, image: Image.Image) -> str:
         """
         Extracts text from an image using OCR.
@@ -138,13 +143,14 @@ class PdfImageTextExtractor:
             str: The Base64-encoded string, or an empty string on failure.
         """
         try:
-            if image.mode == "CMYK":
-                image = image.convert("RGB")
-
-            buffer = BytesIO()
-            image.save(buffer, format="PNG")
-            buffer.seek(0)
-            return base64.b64encode(buffer.read()).decode("utf-8")
+            #if image.mode == "CMYK":
+            #    image = image.convert("RGB")
+#
+            #buffer = BytesIO()
+            #image.save(buffer, format="PNG")
+            #buffer.seek(0)
+            #return base64.b64encode(buffer.read()).decode("utf-8")
+            return "this is 64"
         except Exception as e:
             logging.error(f"Error converting image to base64: {str(e)}")
             return ""
@@ -182,3 +188,7 @@ class PdfImageTextExtractor:
         except Exception as e:
             logging.error(f"Error in visualLink: {str(e)}")
             return "Error finding related text."
+
+#x = PdfImageTextExtractor()
+#res = x.extract_images(file_path=Path(r"C:\Users\zohre\bachelorT\MediLink\example\sample_pdfs\IntroductionToAnaesthesia.pdf"))
+#print(json.dumps(res, indent=4))

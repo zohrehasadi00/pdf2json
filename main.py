@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from api import pdf_processing
+from api import api
 
 app = FastAPI(
     title="Document Processing API",
@@ -19,7 +19,6 @@ app.add_middleware(
 
 app.include_router(pdf_processing.router, prefix="/api/pdf-processing", tags=["PDF Processing"])
 
-
 @app.get("/", tags=["Health Check"])
 def health_check():
     """
@@ -27,4 +26,15 @@ def health_check():
     """
     return {"status": "OK", "message": "The API is up and running!"}
 
-# TODO: API doesnt connect
+
+# @app.post("/api/pdf-processing/save-response")
+# async def save_response(response: dict):
+#     """
+#     Endpoint to save JSON response to a file.
+#     """
+#     output_path = Path(r"C:\Users\zohre\bachelorT\MediLink\example\response.json")
+#     with open(output_path, "w", encoding="utf-8") as json_file:
+#         json.dump(response, json_file, ensure_ascii=False, indent=4)
+#
+#     return {"status": "Success", "message": "Response saved successfully."}
+
