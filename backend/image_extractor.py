@@ -1,19 +1,19 @@
 import os
-import json
 os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
+import base64
+import PyPDF2
+import logging
+import time
 from PIL import Image
 from typing import List, Dict
-import base64
 from io import BytesIO
-import logging
 from pathlib import Path
 from models.tesseract_ocr_model import TesseractOcrModel
 from models.base_ocr_model import BaseOcrModel
-import PyPDF2
 from sklearn.metrics.pairwise import cosine_similarity
 from sentence_transformers import SentenceTransformer
 from models.blip_model import BlipModel
-import pdfplumber
+from datetime import timedelta
 
 blip = BlipModel()
 
@@ -67,13 +67,15 @@ class PdfImageTextExtractor:
         Returns:
             List[Dict]: A list of dictionaries, each representing a page with grouped images.
         """
+        logging.info("Start processing images and the data of the pdf")
+        start_time = time.perf_counter()
         pages = []
         try:
             with open(file_path, "rb") as f:
                 reader = PyPDF2.PdfReader(f)
 
                 for page_number, page in enumerate(reader.pages, 1):
-                    pdftext = ""
+                    pdftext = page.extract_text()
                     resources = page.get("/Resources")
                     if not resources or "/XObject" not in resources:
                         continue
@@ -88,16 +90,19 @@ class PdfImageTextExtractor:
                             if image is None:
                                 logging.warning(f"Skipping a failed image on page {page_number}.")
                                 continue
-
-                            # Process the image
+                            logging.info("processing image64")
                             base64_image = self.image_to_base64(image)
-                            match = self.visualLink(pdftext, base64_image)
+                            logging.info("processing description")
+                            description = self.describe(base64_image)
+                            logging.info("extracting text from image")
                             extracted_text = self.extract_text_from_image(image)
+                            logging.info("and matching")
+                            match = self.visualLink(pdftext, description)
 
-                            # Store the image and its data under keys like image1, image2, etc.
                             page_images[f"image{image_count}"] = {
-                                "Base64Image": base64_image,
-                                "ExtractedText": extracted_text,
+                                "Base64 of Image": base64_image,
+                                "Image Description": description,
+                                "Extracted Text From Image": extracted_text,
                                 "Related paragraph/s": match
                             }
                             image_count += 1
@@ -107,11 +112,12 @@ class PdfImageTextExtractor:
                             "Page": f"Page {page_number}",
                             **page_images  # Add the images as individual keys
                         })
-
+            duration = timedelta(seconds=time.perf_counter() - start_time)
+            logging.info(f"Summarization took: {duration}")
+            return pages
         except Exception as e:
             logging.error(f"Error extracting images from PDF {file_path}: {str(e)}")
-
-        return pages
+            return []
 
 
     def extract_text_from_image(self, image: Image.Image) -> str:
@@ -126,6 +132,9 @@ class PdfImageTextExtractor:
         """
         try:
             text = self.ocr_model.predict(image)
+            text = text.replace("\n\n", "__")
+            text = text.replace("\n", "")
+            text = text.replace("%) Thieme Compliance", "No text found")
             return text
         except Exception as e:
             logging.error(f"Error extracting text from image: {str(e)}")
@@ -143,19 +152,19 @@ class PdfImageTextExtractor:
             str: The Base64-encoded string, or an empty string on failure.
         """
         try:
-            #if image.mode == "CMYK":
-            #    image = image.convert("RGB")
-#
-            #buffer = BytesIO()
-            #image.save(buffer, format="PNG")
-            #buffer.seek(0)
-            #return base64.b64encode(buffer.read()).decode("utf-8")
-            return "this is 64"
+            if image.mode == "CMYK":
+                image = image.convert("RGB")
+
+            buffer = BytesIO()
+            image.save(buffer, format="PNG")
+            buffer.seek(0)
+            return base64.b64encode(buffer.read()).decode("utf-8")
+
         except Exception as e:
             logging.error(f"Error converting image to base64: {str(e)}")
             return ""
 
-    def visualLink(self, text: str, code: str) -> str:
+    def visualLink(self, text: str, caption: str) -> str:
         """
             Match image base64 to the most relevant paragraph based on the image caption and paragraph text using BLIP model that it calls
 
@@ -165,14 +174,13 @@ class PdfImageTextExtractor:
 
             Returns:
             - the related paragraph from the given text to the image.
-            """
+        """
         try:
             paragraphs = [p.strip() for p in text.split("\n") if p.strip()]
             if not paragraphs:
                 return "No relevant text found."
 
             paragraph_embeddings = self.sentence_model.encode(paragraphs)
-            caption = blip.generate_caption(code)
             caption_embedding = self.sentence_model.encode([caption])
             similarities = cosine_similarity(caption_embedding, paragraph_embeddings)
 
@@ -189,6 +197,19 @@ class PdfImageTextExtractor:
             logging.error(f"Error in visualLink: {str(e)}")
             return "Error finding related text."
 
-#x = PdfImageTextExtractor()
-#res = x.extract_images(file_path=Path(r"C:\Users\zohre\bachelorT\MediLink\example\sample_pdfs\IntroductionToAnaesthesia.pdf"))
-#print(json.dumps(res, indent=4))
+    def describe(self, base64_image: str) -> str:
+        """
+        Generates a description for the given image using the BLIP model.
+
+        Args:
+            base64_image: String from image_to_base64 function
+
+        Returns:
+            str: The image description generated by the model.
+        """
+        try:
+            caption = blip.generate_caption(base64_image)
+            return caption
+        except Exception as e:
+            logging.error(f"Error generating image description: {str(e)}")
+            return "Error generating description."

@@ -1,13 +1,12 @@
-
+import os
+import tempfile
+import shutil
+import json
 import logging
 from pathlib import Path
 from fastapi import APIRouter, UploadFile, HTTPException
 from fastapi.responses import JSONResponse
 from backend.pdf_processor import process_pdf
-import os
-import tempfile
-import shutil
-import json
 
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
@@ -34,21 +33,17 @@ async def extract_text_from_pdf(file: UploadFile):
             temp_file.write(file_data)
             logger.info(f"Saved file to temporary path: {temp_file_path} (Size: {len(file_data)} bytes)")
 
-        result = {"Status": "Success", "Pages": []}
-
-        # Process PDF
         logger.info("Processing PDF...")
         pdf_results = process_pdf(temp_file_path)
         logger.debug(f"Extracted information: {pdf_results}")
 
-        # Save results as JSON file and then returning to the main
-        output_path = Path(r"C:\Users\zohre\bachelorT\MediLink\example\response.json")
+        output_path = Path(r"C:\Users\zohre\bachelorT\MediLink\reports\response.json")
         with open(output_path, "w", encoding="utf-8") as json_file:
-            json.dump(result, json_file, ensure_ascii=False, indent=4)
+            json.dump(pdf_results, json_file, ensure_ascii=False, indent=4)
         logger.info(f"Saved JSON response to: {output_path}")
 
         logger.info("PDF processing completed successfully.")
-        return JSONResponse(content=result)
+        return JSONResponse(content=pdf_results)
 
 
     except Exception as e:
@@ -56,7 +51,6 @@ async def extract_text_from_pdf(file: UploadFile):
         raise HTTPException(status_code=500, detail=f"Error processing PDF: {str(e)}")
 
     finally:
-        # Cleanup temporary files
         if os.path.exists(temp_file_path):
             os.remove(temp_file_path)
             logger.debug(f"Deleted temporary file: {temp_file_path}")

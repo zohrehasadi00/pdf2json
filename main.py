@@ -17,7 +17,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(pdf_processing.router, prefix="/api/pdf-processing", tags=["PDF Processing"])
+app.include_router(api.router, prefix="/api/pdf-processing", tags=["PDF Processing"])
 
 @app.get("/", tags=["Health Check"])
 def health_check():
@@ -26,15 +26,4 @@ def health_check():
     """
     return {"status": "OK", "message": "The API is up and running!"}
 
-
-# @app.post("/api/pdf-processing/save-response")
-# async def save_response(response: dict):
-#     """
-#     Endpoint to save JSON response to a file.
-#     """
-#     output_path = Path(r"C:\Users\zohre\bachelorT\MediLink\example\response.json")
-#     with open(output_path, "w", encoding="utf-8") as json_file:
-#         json.dump(response, json_file, ensure_ascii=False, indent=4)
-#
-#     return {"status": "Success", "message": "Response saved successfully."}
-
+# curl.exe -X POST "http://127.0.0.1:8000/api/pdf-processing/text" -F "file=@C:/Users/zohre/OneDrive/Desktop/bachelorArbeit/pdf_example/IntroductionToAnaesthesia.pdf"

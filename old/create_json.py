@@ -16,5 +16,4 @@ def save_result_as_json(result, file_name):
 
     except Exception as e:
         print(f"Error saving the JSON file: {e}")
-# formated_result = "\n".join(json.dumps(item, indent=4) for item in result)
-# print(formated_result)
+
