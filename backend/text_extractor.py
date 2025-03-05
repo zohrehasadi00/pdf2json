@@ -1,8 +1,5 @@
-import os
-os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 import logging
 import time
-import re
 from datetime import timedelta
 from typing import Dict
 from models.longformer_model import summarization
@@ -16,12 +13,12 @@ def extract_text_and_summarize(page, page_no) -> Dict:
 
     try:
         text = page.extract_text()
-        #text = re.sub(r"\(cid:\d+\)", " ", text).strip()
 
         if text:
             try:
-                #summary = summarization(text)
-                summary = "this is summary"
+                logging.info("Going into the Summarization model")
+                summary = summarization(text)
+                #summary = "this is summary"
             except Exception as e:
                 logging.error(f"Error summarizing text on page {page_no}: {str(e)}")
                 summary = "An error occurred and summary was not possible"

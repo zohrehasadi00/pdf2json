@@ -1,6 +1,7 @@
+import os
+os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 import pdfplumber
 from pathlib import Path
-import json
 import logging
 import time
 from datetime import timedelta
@@ -56,4 +57,3 @@ def process_pdf(file_path: Path) -> dict:
         result["Error"] = str(e)
 
     return result
-
