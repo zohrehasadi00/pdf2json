@@ -1,6 +1,7 @@
 import base64
 import PyPDF2
 import logging
+import json
 import time
 from PIL import Image
 from typing import List, Dict
@@ -21,8 +22,7 @@ class PdfImageTextExtractor:
         self.ocr_model = TesseractOcrModel(BaseOcrModel)
         self.sentence_model = SentenceTransformer("all-MiniLM-L6-v2")  # Lightweight embedding model
 
-    @staticmethod
-    def _decode_image(obj) -> Image.Image:
+    def _decode_image(self, obj) -> Image.Image:
         """
         Decodes a PDF image object into a PIL Image.
 
@@ -55,13 +55,12 @@ class PdfImageTextExtractor:
 
         return None
 
-    def extract_images(self, file_path: Path) -> List[Dict]:
+    def extract_images(self, file_path: Path, page_data: List[dict]) -> List[Dict]:
         """
         Extracts images and associated text from the provided PDF file.
-
         Args:
             file_path (Path): The file path to the PDF document.
-
+            page_data (List[dict]): List of all paragraphs from pages
         Returns:
             List[Dict]: A list of dictionaries, each representing a page with grouped images.
         """
@@ -71,13 +70,12 @@ class PdfImageTextExtractor:
         try:
             with open(file_path, "rb") as f:
                 reader = PyPDF2.PdfReader(f)
-
+                logging.info("pdf has been read")
                 for page_number, page in enumerate(reader.pages, 1):
-                    pdftext = page.extract_text()
+                    # pdftext = page.extract_text()
                     resources = page.get("/Resources")
                     if not resources or "/XObject" not in resources:
                         continue
-
                     xObject = resources["/XObject"].get_object()
                     page_images = {}
                     image_count = 1
@@ -95,8 +93,7 @@ class PdfImageTextExtractor:
                             logging.info("extracting text from image")
                             extracted_text = self.extract_text_from_image(image)
                             logging.info("and matching")
-                            match = self.visualLink(pdftext, description)
-
+                            match = self.visualLink(image, page_data, page_number)
                             page_images[f"image{image_count}"] = {
                                 "Base64 of Image": base64_image,
                                 "Image Description": description,
@@ -104,7 +101,6 @@ class PdfImageTextExtractor:
                                 "Related paragraph/s": match
                             }
                             image_count += 1
-
                     if page_images:
                         pages.append({
                             "Page": f"Page {page_number}",
@@ -112,11 +108,10 @@ class PdfImageTextExtractor:
                         })
             duration = timedelta(seconds=time.perf_counter() - start_time)
             logging.info(f"Summarization took: {duration}")
-            return pages
+
         except Exception as e:
             logging.error(f"Error extracting images from PDF {file_path}: {str(e)}")
-            return []
-
+        return pages
 
     def extract_text_from_image(self, image: Image.Image) -> str:
         """
@@ -162,38 +157,29 @@ class PdfImageTextExtractor:
             logging.error(f"Error converting image to base64: {str(e)}")
             return ""
 
-    def visualLink(self, text: str, caption: str) -> str:
+    def visualLink(self, image: Image.Image, page_data: List[dict], page_number: int) -> str:
         """
-            Match image base64 to the most relevant paragraph based on the image caption and paragraph text using BLIP model that it calls
+        This function will receive a decoded image (Pillow Image object), the page data,
+        and the page number. It will search through paragraphs on the given page and
+        return the most relevant paragraph or 'No related paragraph found'.
 
-            Args:
-            - extracted text from the page
-            - images_base64 of the image
+        Args:
+            image (Image.Image): Decoded image.
+            page_data (List[dict]): List of paragraphs for the page.
+            page_number (int): The page number to filter paragraphs.
 
-            Returns:
-            - the related paragraph from the given text to the image.
+        Returns:
+            str: The most relevant paragraph related to the image, or 'No related paragraph found'.
         """
-        try:
-            paragraphs = [p.strip() for p in text.split("\n") if p.strip()]
-            if not paragraphs:
-                return "No relevant text found."
+        extracted_text = self.extract_text_from_image(image)
+        relevant_paragraphs = [para for para in page_data if para.get('page') == page_number]
 
-            paragraph_embeddings = self.sentence_model.encode(paragraphs)
-            caption_embedding = self.sentence_model.encode([caption])
-            similarities = cosine_similarity(caption_embedding, paragraph_embeddings)
+        for paragraph in relevant_paragraphs:
+            paragraph_text = paragraph["paragraph"]
+            if extracted_text.lower() in paragraph_text.lower():
+                return paragraph_text
 
-            most_similar_index = similarities.argmax()
-            most_similar_paragraph = paragraphs[most_similar_index]
-
-            most_similar_score = similarities[0][most_similar_index]
-            similarity_threshold = 0.2
-            if most_similar_score < similarity_threshold:
-                return "No related paragraph was found"
-
-            return most_similar_paragraph
-        except Exception as e:
-            logging.error(f"Error in visualLink: {str(e)}")
-            return "Error finding related text."
+        return "No related paragraph found"
 
     def describe(self, base64_image: str) -> str:
         """
