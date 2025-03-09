@@ -30,3 +30,4 @@ USER appuser
 
 # run the application
 ENTRYPOINT ["python", "main.py"]
+# docker compose
