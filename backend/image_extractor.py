@@ -1,7 +1,7 @@
 import base64
 import PyPDF2
 import logging
-import json
+# import json
 import time
 from PIL import Image
 from typing import List, Dict
@@ -9,7 +9,7 @@ from io import BytesIO
 from pathlib import Path
 from models.tesseract_ocr_model import TesseractOcrModel
 from models.base_ocr_model import BaseOcrModel
-from sklearn.metrics.pairwise import cosine_similarity
+# from sklearn.metrics.pairwise import cosine_similarity
 from sentence_transformers import SentenceTransformer
 from models.blip_model import BlipModel
 from datetime import timedelta
@@ -22,7 +22,8 @@ class PdfImageTextExtractor:
         self.ocr_model = TesseractOcrModel(BaseOcrModel)
         self.sentence_model = SentenceTransformer("all-MiniLM-L6-v2")  # Lightweight embedding model
 
-    def _decode_image(self, obj) -> Image.Image:
+    @staticmethod
+    def _decode_image(obj) -> Image.Image | None:
         """
         Decodes a PDF image object into a PIL Image.
 
@@ -46,6 +47,8 @@ class PdfImageTextExtractor:
                     color_space = obj.get("/ColorSpace", "/DeviceRGB")
                     mode = "RGB" if color_space == "/DeviceRGB" else "P"
                     return Image.frombytes(mode, (width, height), data)
+                elif filter_type == "/CCITTFaxDecode":
+                    return Image.frombytes("1", (width, height), data)
                 else:
                     logging.warning(f"Unsupported image filter: {filter_type}")
             else:
@@ -72,7 +75,6 @@ class PdfImageTextExtractor:
                 reader = PyPDF2.PdfReader(f)
                 logging.info("pdf has been read")
                 for page_number, page in enumerate(reader.pages, 1):
-                    # pdftext = page.extract_text()
                     resources = page.get("/Resources")
                     if not resources or "/XObject" not in resources:
                         continue
@@ -158,22 +160,17 @@ class PdfImageTextExtractor:
             return ""
 
     def visualLink(self, image: Image.Image, page_data: List[dict], page_number: int) -> str:
-        """
-        This function will receive a decoded image (Pillow Image object), the page data,
-        and the page number. It will search through paragraphs on the given page and
-        return the most relevant paragraph or 'No related paragraph found'.
-
-        Args:
-            image (Image.Image): Decoded image.
-            page_data (List[dict]): List of paragraphs for the page.
-            page_number (int): The page number to filter paragraphs.
-
-        Returns:
-            str: The most relevant paragraph related to the image, or 'No related paragraph found'.
-        """
         extracted_text = self.extract_text_from_image(image)
-        relevant_paragraphs = [para for para in page_data if para.get('page') == page_number]
 
+        # Find the correct page in page_data
+        page_entry = next((entry for entry in page_data if entry.get("page") == page_number), None)
+
+        if not page_entry or "data" not in page_entry or "paragraphs" not in page_entry["data"]:
+            return "No related paragraph found"
+
+        relevant_paragraphs = page_entry["data"]["paragraphs"]
+
+        # Search for the most relevant paragraph
         for paragraph in relevant_paragraphs:
             paragraph_text = paragraph["paragraph"]
             if extracted_text.lower() in paragraph_text.lower():
@@ -181,7 +178,8 @@ class PdfImageTextExtractor:
 
         return "No related paragraph found"
 
-    def describe(self, base64_image: str) -> str:
+    @staticmethod
+    def describe(base64_image: str) -> str:
         """
         Generates a description for the given image using the BLIP model.
 

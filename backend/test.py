@@ -92,7 +92,3 @@ def process_pdf(pdf_path, max_workers=None):
         merged_results.append(merged_dict)
 
     return merged_results
-
-# Example usage:
-# result = process_pdf("example.pdf")
-# print(result)

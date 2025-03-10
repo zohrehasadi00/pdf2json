@@ -68,33 +68,3 @@ def extract_text_and_summarize(page) -> Dict:
     except Exception as e:
         # logging.error(f"Error extracting text or reading page {page_no}: {str(page_error)}")
         return {"Text": f"Error reading page: {e}", "Summary": "No summary available"}
-
-
-"""
-]
-    {
-      "Section Title": "",
-      "text": ""
-      "summary": ""
-    },
-    ...
-]
-
-
-"""
-"""
-[
-    {
-        "page": 1,
-        "data": {
-            "paragraphs": [
-                {
-                    "paragraph": "",
-                    "summary": ""
-                }
-            ]
-        }
-    },
-    ...
-]
-"""

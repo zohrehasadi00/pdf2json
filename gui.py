@@ -16,7 +16,7 @@ def resize_image(image_path, target_width, target_height):
 
 def papaias():
     sg.theme("Green")
-    resized_image = resize_image(r"/example/fu-logo.png", 500, 170)
+    resized_image = resize_image(r"/statics/fu-logo.png", 500, 170)
     layout = [
         [sg.Text("MediLink - Freie Universität, Berlin", justification="center", size=(50, 1), font=("Helvetica", 20))],
         [sg.Image(data=resized_image, pad=((42,0), (20,20)))],
