@@ -1,18 +1,14 @@
-# import os
-
-# os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 import pdfplumber
 import logging
-import json
-# import PyPDF2
 from pathlib import Path
-
+from backend.text_extractor import extract_text_and_summarize
+from backend.image_extractor import PdfImageTextExtractor
+# import json
 # import time
+# import PyPDF2
 # from typing import List
 # from datetime import timedelta
 # from concurrent.futures import ThreadPoolExecutor
-from backend.text_extractor import extract_text_and_summarize
-from backend.image_extractor import PdfImageTextExtractor
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 extractor = PdfImageTextExtractor()
@@ -26,7 +22,7 @@ def combine_page_and_image_data(page_data, image_data):
         paragraphs = page_entry["data"]["paragraphs"]
 
         images_for_page = next(
-            (img_entry for img_entry in image_data if img_entry["Page"] == f"Page {page_number}"),
+            (img_entry for img_entry in image_data if img_entry["page"] == f"page {page_number}"),
             None
         )
 
@@ -35,16 +31,16 @@ def combine_page_and_image_data(page_data, image_data):
             for key, image_info in images_for_page.items():
                 if key.startswith("image"):
                     formatted_images.append({
-                        "Base64 of Image": image_info["Base64 of Image"],
-                        "Image Description": image_info["Image Description"],
-                        "Extracted Text From Image": image_info["Extracted Text From Image"],
-                        "Related Paragraph": image_info["Related paragraph/s"],
+                        "base64 of image": image_info["base64 of image"],
+                        "image description": image_info["image description"],
+                        "extracted text from image": image_info["extracted text from image"],
+                        "related paragraph": image_info["related paragraph/s"],
                     })
 
         combined_data.append({
-            "Page": page_number,
-            "Paragraphs": paragraphs,
-            "Extracted Images": formatted_images
+            "page": page_number,
+            "paragraphs": paragraphs,
+            "extracted images": formatted_images
         })
 
     return combined_data
@@ -68,36 +64,8 @@ def process_pdf(file_path: Path) -> dict:
 
         image_data = extractor.extract_images(file_path, page_data)
         combined_data = combine_page_and_image_data(page_data, image_data)
-        return {"Status": "Success", "Title": file_path.name, "Combined Data": combined_data}
-        # with pdfplumber.open(file_path) as pdf:
-        #     if not pdf.pages:
-        #         # logging.error(f"The PDF file '{file_path}' has no pages.")
-        #         raise ValueError(f"The PDF file '{file_path}' has no pages.")
-        #     with ThreadPoolExecutor() as executor:
-        #         text_results = list(executor.map(
-        #             lambda args: {
-        #                 "Page": f"Page {args[1]}",
-        #                 **executor.submit(extract_text_and_summarize, *args).result()
-        #             },
-        #             zip(pdf.pages, range(1, len(pdf.pages) + 1))
-        #         ))
-
-        # image_results = extractor.extract_images(file_path)
-        # merged_pages = []
-        # for text_page in text_results:
-        #     image_page = next((p for p in image_results if p["Page"] == text_page["Page"]), None)
-        #     if image_page:
-        #         merged_pages.append({**text_page, **image_page})
-        #     else:
-        #         merged_pages.append(text_page)  # Keep text-only pages
-        # result["Pages"].extend(merged_pages)
-        # duration = timedelta(seconds=time.perf_counter() - start_time)
-        # logging.info(f"Processing the text took: {duration}")
+        return {"status": "success", "title": file_path.name, "extracted data": combined_data}
 
     except Exception as e:
         # logging.error(f"Error processing the PDF: {str(e)}")
-        return {"Status": "Failure", "Error": str(e)}
-
-
-# fun = process_pdf(file_path=Path(r""))
-# print(json.dumps(fun, indent=4))
+        return {"status": "failure", "error": str(e)}

@@ -1,18 +1,18 @@
-import pytesseract
-
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from api import api
 from gui import papaias
-import subprocess, requests, time, logging
-
-logging.getLogger("torch").setLevel(logging.WARNING)  # Suppress info logs from torch
-logging.getLogger("sentence_transformers").setLevel(logging.WARNING)
+from fastapi import FastAPI, File, UploadFile
+from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
+import uvicorn
+import io
+import threading
+from api.api import extract_text_from_pdf
+import os
+os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 
 app = FastAPI(
     title="Document Processing API",
     description="An API for processing PDFs (text extraction and summarization).",
-    version="1.0.0",
+    version="1.0.0"
 )
 
 # Add CORS middleware
@@ -24,42 +24,46 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(api.router, prefix="/api/pdf-processing", tags=["PDF Processing"])
 
-
-@app.get("/", tags=["Health Check"])
-def health_check():
+@app.post("/api/pdf-processing/text")
+async def process_pdf(file: UploadFile = File(...)):
     """
-    Health check endpoint to verify the API is running.
+    Endpoint to process a PDF file and extract text.
     """
-    return {"status": "OK", "message": "The API is up and running!"}
+    try:
+        content = await file.read()
+        result = {
+            "filename": file.filename,
+            "content": "Extracted text from PDF (replace with actual logic)."
+        }
+        return JSONResponse(content=result, status_code=200)
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
 
 
-# curl.exe -X POST "http://127.0.0.1:8000/api/pdf-processing/text" -F "file=@C:/Users/zohre/OneDrive/Desktop/bachelorArbeit/pdf_example/IntroductionToAnaesthesia.pdf"
-"""
-if __name__ == "__main__":
-    
-    server_process = subprocess.Popen(["uvicorn", "main:app", "--reload"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+async def main():
+    server_thread = threading.Thread(target=uvicorn.run, kwargs={"app": app, "host": "127.0.0.1", "port": 8000})
+    server_thread.daemon = True
+    server_thread.start()
 
-    print("Starting FastAPI server...")
-    while True:
-        output_line = server_process.stdout.readline() 
-        # stucks here: output_line = server_process.stdout.readline()
-        if output_line == "" and server_process.poll() is not None:
-            logging.error("FastAPI server startup failed or terminated unexpectedly.")
-            break
-        if "Application startup complete." in output_line:
-            print("FastAPI is running!")
-            break
-        time.sleep(0.5)
-
-    pdf_path = papaias()
-    logging.info("got the pdf path")
-
+    gui = papaias()
+    pdf_path = gui[0]
+    save_to = gui[1]
     if pdf_path:
-        url = "http://127.0.0.1:8000/api/pdf-processing/text"
-        files = {"file": open(pdf_path, "rb")}
 
-        response = requests.post(url, files=files)
-        logging.info("response has been saved")
-"""
+        file_name = pdf_path.name
+        file_content = pdf_path.read_bytes()
+        upload_file = UploadFile(filename=file_name, file=io.BytesIO(file_content))
+
+        print(f"Selected PDF: {pdf_path}")
+        print("Sending file to the API...")
+
+        await extract_text_from_pdf(upload_file, save_to)
+        print("Result is saved in given Path")
+    else:
+        print("No file selected. Exiting.")
+
+
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(main())

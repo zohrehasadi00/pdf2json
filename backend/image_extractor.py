@@ -1,18 +1,16 @@
 import base64
 import PyPDF2
 import logging
-# import json
-import time
 from PIL import Image
 from typing import List, Dict
 from io import BytesIO
 from pathlib import Path
 from models.tesseract_ocr_model import TesseractOcrModel
 from models.base_ocr_model import BaseOcrModel
-# from sklearn.metrics.pairwise import cosine_similarity
 from sentence_transformers import SentenceTransformer
 from models.blip_model import BlipModel
-from datetime import timedelta
+# from datetime import timedelta
+# import time
 
 blip = BlipModel()
 
@@ -39,15 +37,15 @@ class PdfImageTextExtractor:
 
             if "/Filter" in obj:
                 filter_type = obj["/Filter"]
-                if filter_type == "/DCTDecode":
+                if filter_type == "/DCTDecode":  # JPEG-like
                     return Image.open(BytesIO(data))
                 elif filter_type == "/JPXDecode":
                     return Image.open(BytesIO(data))
-                elif filter_type == "/FlateDecode":
+                elif filter_type == "/FlateDecode":  # PNG-like
                     color_space = obj.get("/ColorSpace", "/DeviceRGB")
                     mode = "RGB" if color_space == "/DeviceRGB" else "P"
                     return Image.frombytes(mode, (width, height), data)
-                elif filter_type == "/CCITTFaxDecode":
+                elif filter_type == "/CCITTFaxDecode":  # TIFF-like
                     return Image.frombytes("1", (width, height), data)
                 else:
                     logging.warning(f"Unsupported image filter: {filter_type}")
@@ -67,13 +65,13 @@ class PdfImageTextExtractor:
         Returns:
             List[Dict]: A list of dictionaries, each representing a page with grouped images.
         """
-        logging.info("Start processing images and the data of the pdf")
-        start_time = time.perf_counter()
+        # logging.info("Start processing images and the data of the pdf")
+        # start_time = time.perf_counter()
         pages = []
         try:
             with open(file_path, "rb") as f:
                 reader = PyPDF2.PdfReader(f)
-                logging.info("pdf has been read")
+                # logging.info("pdf has been read")
                 for page_number, page in enumerate(reader.pages, 1):
                     resources = page.get("/Resources")
                     if not resources or "/XObject" not in resources:
@@ -88,28 +86,25 @@ class PdfImageTextExtractor:
                             if image is None:
                                 logging.warning(f"Skipping a failed image on page {page_number}.")
                                 continue
-                            logging.info("processing image64")
+
                             base64_image = self.image_to_base64(image)
-                            logging.info("processing description")
                             description = self.describe(base64_image)
-                            logging.info("extracting text from image")
                             extracted_text = self.extract_text_from_image(image)
-                            logging.info("and matching")
                             match = self.visualLink(image, page_data, page_number)
                             page_images[f"image{image_count}"] = {
-                                "Base64 of Image": base64_image,
-                                "Image Description": description,
-                                "Extracted Text From Image": extracted_text,
-                                "Related paragraph/s": match
+                                "base64 of image": base64_image,
+                                "image description": description,
+                                "extracted text from image": extracted_text,
+                                "related paragraph/s": match
                             }
                             image_count += 1
                     if page_images:
                         pages.append({
-                            "Page": f"Page {page_number}",
+                            "page": f"page {page_number}",
                             **page_images  # Add the images as individual keys
                         })
-            duration = timedelta(seconds=time.perf_counter() - start_time)
-            logging.info(f"Summarization took: {duration}")
+            # duration = timedelta(seconds=time.perf_counter() - start_time)
+            # logging.info(f"Summarization took: {duration}")
 
         except Exception as e:
             logging.error(f"Error extracting images from PDF {file_path}: {str(e)}")
@@ -162,7 +157,6 @@ class PdfImageTextExtractor:
     def visualLink(self, image: Image.Image, page_data: List[dict], page_number: int) -> str:
         extracted_text = self.extract_text_from_image(image)
 
-        # Find the correct page in page_data
         page_entry = next((entry for entry in page_data if entry.get("page") == page_number), None)
 
         if not page_entry or "data" not in page_entry or "paragraphs" not in page_entry["data"]:
@@ -170,7 +164,6 @@ class PdfImageTextExtractor:
 
         relevant_paragraphs = page_entry["data"]["paragraphs"]
 
-        # Search for the most relevant paragraph
         for paragraph in relevant_paragraphs:
             paragraph_text = paragraph["paragraph"]
             if extracted_text.lower() in paragraph_text.lower():

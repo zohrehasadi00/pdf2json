@@ -1,5 +1,5 @@
-from pytesseract import image_to_string
 from PIL import Image
+from pytesseract import image_to_string
 from models.base_ocr_model import BaseOcrModel
 
 
@@ -18,7 +18,6 @@ class TesseractOcrModel(BaseOcrModel):
         :return: Extracted text as a string.
         """
         try:
-            # Extract text using pytesseract
             return image_to_string(image)
         except Exception as e:
             raise Exception(f"Error using Tesseract OCR: {str(e)}")
