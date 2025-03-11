@@ -1,8 +1,8 @@
 import logging
-import time
-from datetime import timedelta
 from typing import Dict
 from models.gpt4 import summarize_text
+# import time
+# from datetime import timedelta
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %
 def extract_text_and_summarize(page) -> Dict:
     # start_time = time.perf_counter()
     try:
-        time.sleep(1)
+        # time.sleep(1)
         text = page.extract_text()
         if not text:
             # logging.warning(f"No text found on page {page_no}")
@@ -39,7 +39,7 @@ def extract_text_and_summarize(page) -> Dict:
 
                 try:
                     summary = summarize_text(section_text)
-                except Exception as e:
+                except Exception():
                     # logging.error(f"Error summarizing section '{section_title}' on page {page_no}: {str(e)}")
                     summary = "An error occurred, and summarization was not possible"
 
@@ -51,7 +51,7 @@ def extract_text_and_summarize(page) -> Dict:
             for paragraph in paragraphs_list:
                 try:
                     summary = summarize_text(paragraph)
-                except Exception as e:
+                except Exception:
                     # logging.error(f"Error summarizing paragraph on page {page_no}: {str(e)}")
                     summary = "An error occurred, and summarization was not possible"
 
@@ -67,4 +67,4 @@ def extract_text_and_summarize(page) -> Dict:
 
     except Exception as e:
         # logging.error(f"Error extracting text or reading page {page_no}: {str(page_error)}")
-        return {"Text": f"Error reading page: {e}", "Summary": "No summary available"}
+        return {"text": f"error reading page: {e}", "summary": "No summary available"}

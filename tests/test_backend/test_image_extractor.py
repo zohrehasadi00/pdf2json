@@ -6,8 +6,6 @@ from PIL import Image
 import base64
 from io import BytesIO
 
-#TODO: how to get pdfs from example folder??
-#TODO: Is this necessary?
 @pytest.fixture
 def sample_pdf():
     """All passed the tests."""
