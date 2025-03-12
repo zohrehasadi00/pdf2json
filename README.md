@@ -61,32 +61,21 @@
   - On Windows:
     - Download the installer from [Tesseract GitHub](https://github.com/tesseract-ocr/tesseract) and add it to your system PATH.
 
-### <span style="color:#3271a5">2. Clone the Repository and Set Up Environment Variables</span>  
+### <span style="color:#3271a5">2. Clone the Repository</span>  
 <span style="color:white">Clone the project repository to your local machine:
-  ```bash
-  git clone https://github.com/your-username/your-repo.git
-  cd your-repo
 
-Create a .env file and add necessary environment variables
-echo "OPENAI_API_KEY=your_openai_api_key" > .env
-echo "BLIP_MODEL_PATH=path_to_blip_model" >> .env
-echo "TESSERACT_PATH=/usr/bin/tesseract" >> .env 
+        git clone https://github.com/your-username/your-repo.git
+        cd your-repo
 
-### <span style="color:#3271a5">4. Build and Run the Docker Container</span>
+### <span style="color:#3271a5">3. Build and Run the Docker Container</span>
 1. Build the Docker image:
-    ´´´bash
-    docker build -t your-app-name .
+
+        docker build -t your-app-name .
+
 2. Run the Docker container:
- ´´´bash
- docker run -p 8000:8000 your-app-name
+   
+       docker run -p 8000:8000 your-app-name
 
+### <span style="color:#3271a5">4. Blabla</span>
+blabla
 
-# 28A745: green
-# 007BFF : blue
-# 6F42C1 :light purple
-# FD7E14 :orange
-# 20C997 : teal: light green
-#DC3545 :red
-#FFC107 :gold
-#FF6F61:coral
-6610F2:dark purple , indigo
