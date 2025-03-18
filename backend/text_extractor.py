@@ -12,6 +12,7 @@ def extract_text_and_summarize(page) -> Dict:
     try:
         # time.sleep(1)
         text = page.extract_text()
+        text = text.lower()
         if not text:
             # logging.warning(f"No text found on page {page_no}")
             return {"paragraphs": [], "sections": []}
@@ -33,6 +34,7 @@ def extract_text_and_summarize(page) -> Dict:
         result = {}
 
         if sections:
+            logging.info("System detects sections")
             for section in sections:
                 section_title = list(section.keys())[0]
                 section_text = section[section_title].strip()

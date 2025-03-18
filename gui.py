@@ -19,7 +19,7 @@ def resize_image(image_path, target_width, target_height):
 
 def papaias() -> List:
     sg.theme("Green")
-    resized_image = resize_image(r"C:\Users\zohre\bachelorT\MediLink\statics\fu-logo.png", 500, 170)
+    resized_image = resize_image(r"C:\Users\zohre\bachelorT\MediLink\fu-logo.png", 500, 170)
     layout = [
         [sg.Text("MediLink - Freie Universität, Berlin", justification="center", size=(50, 1), font=("Helvetica", 20))],
         [sg.Image(data=resized_image, pad=((42, 0), (20, 20)))],
@@ -54,5 +54,3 @@ def papaias() -> List:
 
     window.close()
 
-
-papaias()

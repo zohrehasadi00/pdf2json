@@ -1,3 +1,5 @@
+import time
+
 from gui import papaias
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import JSONResponse
@@ -46,11 +48,15 @@ async def main():
     server_thread.daemon = True
     server_thread.start()
 
+    print("API server started. Now launching GUI...")
+
+    # Ensure GUI only launches once
     gui = papaias()
+
     pdf_path = gui[0]
     save_to = gui[1]
-    if pdf_path:
 
+    if pdf_path:
         file_name = pdf_path.name
         file_content = pdf_path.read_bytes()
         upload_file = UploadFile(filename=file_name, file=io.BytesIO(file_content))
@@ -59,11 +65,13 @@ async def main():
         print("Sending file to the API...")
 
         await extract_text_from_pdf(upload_file, save_to)
-        print("Result is saved in given Path")
+
+        print(f"Result is saved in {save_to}")
     else:
         print("No file selected. Exiting.")
 
 
 if __name__ == "__main__":
     import asyncio
+
     asyncio.run(main())

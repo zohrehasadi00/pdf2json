@@ -1,4 +1,3 @@
-celery
 fastapi
 fastapi-cors
 fitz
@@ -18,7 +17,6 @@ python-base64
 python-dotenv
 python-multipart
 pytesseract
-redis
 requests
 sentence-transformers
 tesseract
