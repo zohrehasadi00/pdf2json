@@ -9,8 +9,11 @@ from models.tesseract_ocr_model import TesseractOcrModel
 from models.base_ocr_model import BaseOcrModel
 from sentence_transformers import SentenceTransformer
 from models.blip_model import BlipModel
+from pdf2image import convert_from_bytes
+
 # from datetime import timedelta
 # import time
+
 
 blip = BlipModel()
 
@@ -19,6 +22,51 @@ class PdfImageTextExtractor:
     def __init__(self):
         self.ocr_model = TesseractOcrModel(BaseOcrModel)
         self.sentence_model = SentenceTransformer("all-MiniLM-L6-v2")  # Lightweight embedding model
+
+    @staticmethod
+    def lzw_decompress(data: bytes) -> bytes:
+        """
+        Decompresses LZW-encoded data from PDFs.
+
+        Args:
+            data (bytes): LZW compressed data.
+
+        Returns:
+            bytes: Decompressed data.
+        """
+        try:
+            import lzma
+            decompressed_data = lzma.decompress(data)
+            return decompressed_data
+        except ImportError:
+            logging.error("LZW decompression failed: 'lzma' library not found.")
+            return b""
+
+    @staticmethod
+    def run_length_decode(data: bytes) -> bytes:
+        """
+        Decodes Run-Length encoded data from PDFs.
+
+        Args:
+            data (bytes): Run-Length compressed data.
+
+        Returns:
+            bytes: Decompressed data.
+        """
+        output = bytearray()
+        i = 0
+        while i < len(data):
+            length = data[i]
+            i += 1
+            if length < 128:
+                output.extend(data[i:i + length + 1])
+                i += length + 1
+            elif length > 128:
+                output.extend(data[i:i + 1] * (257 - length))
+                i += 1
+            elif length == 128:
+                break
+        return bytes(output)
 
     @staticmethod
     def _decode_image(obj) -> Image.Image | None:
@@ -35,22 +83,62 @@ class PdfImageTextExtractor:
             data = obj._data  # noqa: Access to protected member '_data'
             width, height = obj["/Width"], obj["/Height"]
 
-            if "/Filter" in obj:
-                filter_type = obj["/Filter"]
-                if filter_type == "/DCTDecode":  # JPEG-like
-                    return Image.open(BytesIO(data))
-                elif filter_type == "/JPXDecode":
-                    return Image.open(BytesIO(data))
-                elif filter_type == "/FlateDecode":  # PNG-like
-                    color_space = obj.get("/ColorSpace", "/DeviceRGB")
-                    mode = "RGB" if color_space == "/DeviceRGB" else "P"
-                    return Image.frombytes(mode, (width, height), data)
-                elif filter_type == "/CCITTFaxDecode":  # TIFF-like
-                    return Image.frombytes("1", (width, height), data)
-                else:
-                    logging.warning(f"Unsupported image filter: {filter_type}")
-            else:
+            if "/Filter" not in obj:
                 logging.warning("No filter found for the image.")
+                return None
+
+            filter_type = obj["/Filter"]
+
+            if filter_type == "/DCTDecode":  # JPEG
+                return Image.open(BytesIO(data))
+            elif filter_type == "/JPXDecode":  # JPEG 2000
+                return Image.open(BytesIO(data))
+            elif filter_type == "/FlateDecode":  # PNG-like
+                color_space = obj.get("/ColorSpace", "/DeviceRGB")
+                mode = "RGB" if color_space == "/DeviceRGB" else "P"
+                return Image.frombytes(mode, (width, height), data)
+
+            elif filter_type == "/CCITTFaxDecode":  # Fax (1-bit TIFF)
+
+                return Image.frombytes("1", (width, height), data)
+
+            elif filter_type == "/LZWDecode":  # LZW (TIFF compression)
+
+                decoded_data = PdfImageTextExtractor.lzw_decompress(data)
+
+                return Image.open(BytesIO(decoded_data))
+            elif filter_type == "/RunLengthDecode":  # Simple RLE Compression
+                try:
+                    decoded_data = PdfImageTextExtractor.run_length_decode(data)
+                    return Image.open(BytesIO(decoded_data))
+                except Exception as e:
+                    logging.error(f"RunLengthDecode failed: {str(e)}")
+            elif filter_type == "/ASCIIHexDecode":  # ASCII Hex Encoding
+                try:
+                    decoded_data = bytes.fromhex(data.decode("ascii").replace(">", ""))
+                    return Image.open(BytesIO(decoded_data))
+                except Exception as e:
+                    logging.error(f"ASCIIHexDecode failed: {str(e)}")
+            elif filter_type == "/ASCII85Decode":  # ASCII85 Encoding
+                try:
+                    decoded_data = base64.a85decode(data)
+                    return Image.open(BytesIO(decoded_data))
+                except Exception as e:
+                    logging.error(f"ASCII85Decode failed: {str(e)}")
+            elif filter_type == "/JBIG2Decode":  # JBIG2 Compression
+                logging.warning("JBIG2 decoding requires an external decoder.")
+                try:
+                    images = convert_from_bytes(data)
+                    return images[0] if images else None
+                except Exception as e:
+                    logging.error(f"JBIG2 decoding failed: {str(e)}")
+                    return None
+            elif filter_type == "/Crypt":
+                logging.warning("Encrypted image detected. Cannot decode without decryption.")
+                return None
+            else:
+                logging.warning(f"Unsupported image filter: {filter_type}")
+
         except Exception as e:
             logging.error(f"Error decoding image: {str(e)}")
 
@@ -88,12 +176,10 @@ class PdfImageTextExtractor:
                                 continue
 
                             base64_image = self.image_to_base64(image)
-                            description = self.describe(base64_image)
                             extracted_text = self.extract_text_from_image(image)
                             match = self.visualLink(image, page_data, page_number)
                             page_images[f"image{image_count}"] = {
                                 "base64 of image": base64_image,
-                                "image description": description,
                                 "extracted text from image": extracted_text,
                                 "related paragraph/s": match
                             }
@@ -170,21 +256,3 @@ class PdfImageTextExtractor:
                 return paragraph_text
 
         return "No related paragraph found"
-
-    @staticmethod
-    def describe(base64_image: str) -> str:
-        """
-        Generates a description for the given image using the BLIP model.
-
-        Args:
-            base64_image: String from image_to_base64 function
-
-        Returns:
-            str: The image description generated by the model.
-        """
-        try:
-            caption = blip.generate_caption(base64_image)
-            return caption
-        except Exception as e:
-            logging.error(f"Error generating image description: {str(e)}")
-            return "Error generating description."
