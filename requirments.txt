@@ -24,3 +24,4 @@ torch
 transformers
 uvicorn
 pdf2image
+pdf2jpg

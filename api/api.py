@@ -5,9 +5,9 @@ import json
 import logging
 from pathlib import Path
 from fastapi import APIRouter, UploadFile, HTTPException
-# from backend.pdf_processor import process_pdf
 from backend.pdf_processor import process_pdf
 import requests
+import socket
 
 
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -19,7 +19,7 @@ async def extract_text_from_pdf(file: UploadFile, save_to:Path):
     """
     Processes a PDF file, extracts text, and sends the file to the API.
     """
-    # logger.info(f"Received file: {file.filename}")
+    logger.info(f"Received file: {file.filename}")
     url = "http://127.0.0.1:8000/api/pdf-processing/text"
 
     if not file.filename.endswith(".pdf"):
@@ -34,12 +34,8 @@ async def extract_text_from_pdf(file: UploadFile, save_to:Path):
         with open(temp_file_path, "wb") as temp_file:
             file_data = await file.read()
             temp_file.write(file_data)
-            # logger.info(f"Saved file to temporary path: {temp_file_path} (Size: {len(file_data)} bytes)")
 
-        # logger.info("Processing PDF...")
         pdf_results = process_pdf(temp_file_path)
-        # logger.debug(f"Extracted information: {pdf_results}")
-
 
         file_name = "response.json"
         output_path = Path(save_to) / file_name
@@ -47,17 +43,20 @@ async def extract_text_from_pdf(file: UploadFile, save_to:Path):
         with open(output_path, "w", encoding="utf-8") as json_file:
             json.dump(pdf_results, json_file, ensure_ascii=False, indent=4)
         # logger.info(f"Saved JSON response to: {output_path}")
-        # logger.info("Sending file to the API...")
+
         with open(temp_file_path, "rb") as file_to_send:
             files = {"file": (file.filename, file_to_send, "application/pdf")}
             response = requests.post(url, files=files)
 
         if response.status_code == 200:
             logger.info(f"API Response: {response.json()}")
+        elif response.status_code == 404:
+            logger.error(f"API Error 404: Not Found - URL might be incorrect.")
+            actual_port = get_actual_api_port()
+            logger.error(f"Make sure your FastAPI server is running on the correct port: {actual_port}")
         else:
             logger.error(f"API Error: {response.status_code} - {response.text}")
 
-        # logger.info("PDF processing completed successfully.")
         return pdf_results
 
     except Exception as e:
@@ -71,3 +70,19 @@ async def extract_text_from_pdf(file: UploadFile, save_to:Path):
         if os.path.exists(temp_dir):
             shutil.rmtree(temp_dir)
             logger.debug(f"Deleted temporary directory: {temp_dir}")
+
+
+def get_actual_api_port():
+    """
+    Function to dynamically check the actual port on which the FastAPI server is running.
+    """
+    try:
+        socket.setdefaulttimeout(1)
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.bind(("127.0.0.1", 0))  # 0 means OS picks an available port
+        actual_port = s.getsockname()[1]
+        s.close()
+        return actual_port
+    except socket.error as err:
+        logger.error(f"Error detecting the port: {err}")
+        return 8000  # fallback to default port if error occurs

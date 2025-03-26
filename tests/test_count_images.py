@@ -1,6 +1,6 @@
 import pytest
 from pathlib import Path
-from backend.image_extractor import PdfImageTextExtractor
+from backend.normal_pdfs.image_extractor import PdfImageTextExtractor
 
 executor = PdfImageTextExtractor()
 
