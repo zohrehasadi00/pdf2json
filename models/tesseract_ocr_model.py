@@ -12,10 +12,9 @@ class TesseractOcrModel(BaseOcrModel):
         self.base_model_class = base_model_class
 
         self.settings = None or {
-            'language': 'eng',
+            'language': 'eng+deu',   # Extract and finding both English and German words
             'psm': 3,  # Page segmentation mode
             'oem': 3,  # OCR engine mode
-            'image_preprocessing': None
         }
 
     def predict(self, image: Image.Image) -> str:
@@ -25,8 +24,6 @@ class TesseractOcrModel(BaseOcrModel):
         :return: Extracted text as a string.
         """
         try:
-            if self.settings['image_preprocessing']:
-                image = self.settings['image_preprocessing']
             custom_config = f'--psm {self.settings["psm"]} --oem {self.settings["oem"]}'
             return image_to_string(image, lang=self.settings['language'], config=custom_config)
 
