@@ -1,4 +1,4 @@
-from PIL import Image, ImageFilter
+from PIL import Image
 from pytesseract import image_to_string
 from models.base_ocr_model import BaseOcrModel
 
@@ -30,7 +30,6 @@ class TesseractOcrModel(BaseOcrModel):
             custom_config = f'--psm {self.settings["psm"]} --oem {self.settings["oem"]}'
             return image_to_string(image, lang=self.settings['language'], config=custom_config)
 
-            # return image_to_string(image)
         except Exception as e:
             raise Exception(f"Error using Tesseract OCR: {str(e)}")
 
