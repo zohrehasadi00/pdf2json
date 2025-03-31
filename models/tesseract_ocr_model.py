@@ -1,4 +1,4 @@
-from PIL import Image
+from PIL import Image, ImageFilter
 from pytesseract import image_to_string
 from models.base_ocr_model import BaseOcrModel
 
@@ -11,6 +11,13 @@ class TesseractOcrModel(BaseOcrModel):
             raise ValueError("Base model must inherit from BaseOcrModel.")
         self.base_model_class = base_model_class
 
+        self.settings = None or {
+            'language': 'eng',
+            'psm': 3,  # Page segmentation mode
+            'oem': 3,  # OCR engine mode
+            'image_preprocessing': None
+        }
+
     def predict(self, image: Image.Image) -> str:
         """
         Use Tesseract OCR to extract text from a PIL Image.
@@ -18,6 +25,14 @@ class TesseractOcrModel(BaseOcrModel):
         :return: Extracted text as a string.
         """
         try:
-            return image_to_string(image)
+            if self.settings['image_preprocessing']:
+                image = self.settings['image_preprocessing']
+            custom_config = f'--psm {self.settings["psm"]} --oem {self.settings["oem"]}'
+            return image_to_string(image, lang=self.settings['language'], config=custom_config)
+
+            # return image_to_string(image)
         except Exception as e:
             raise Exception(f"Error using Tesseract OCR: {str(e)}")
+
+
+
