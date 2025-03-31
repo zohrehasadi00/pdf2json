@@ -41,7 +41,8 @@ def papaias() -> List:
         event, values = window.read()
 
         if event in (sg.WINDOW_CLOSED, "exit"):
-            break
+            return []
+            # break
 
         if event == "start":
             pdf_path = values["file_path"]

@@ -1,22 +1,21 @@
 import logging
 from pathlib import Path
-from backend.normal_pdfs.text_extractor import extract_text_and_summarize
-from backend.normal_pdfs.image_extractor import PdfImageTextExtractor
 from models.check_pdf import check
 from backend.scanned_pdfs.cid_pdf import process_data
+from backend.normal_pdfs.image_extractor import extract_images
+from backend.normal_pdfs.text_extractor import extract_text_and_summarize
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
-extractor = PdfImageTextExtractor()
 
 
-def combine_page_and_image_data(page_data, image_data):
+def combine_page_and_image_data(page_data, img_data):
     combined_data = []
 
     for page_entry in page_data:
         page_number = page_entry["page"]
         paragraphs = page_entry["data"]["paragraphs"]
 
-        images_for_page = next((img_entry for img_entry in image_data if img_entry["page"] == f"page {page_number}"), None)
+        images_for_page = next((img_entry for img_entry in img_data if img_entry["page"] == f"page {page_number}"), None)
 
         formatted_images = []
         if images_for_page:
@@ -24,9 +23,8 @@ def combine_page_and_image_data(page_data, image_data):
                 if key.startswith("image"):
                     formatted_images.append({
                         "base64 of image": image_info["base64 of image"],
-                        "image description": image_info["image description"],
-                        "extracted text from image": image_info["extracted text from image"],
-                        "related paragraph": image_info["related paragraph/s"],
+                        "extracted text from image": image_info["extracted text from image"]
+                        # "related paragraph": image_info["related paragraph/s"]
                     })
 
         combined_data.append({
@@ -45,13 +43,21 @@ def process_pdf(file_path: Path) -> dict:
         raise FileNotFoundError(f"File not found: {file_path}")
 
     try:
+        logging.info("Checking whether the PDF is scanned ... ")
         if check(file_path):
-            return process_data(file_path)
+            logging.info("PDF is scanned. Using OCR ... ")
+            collected_data = process_data(file_path)
+
         else:
+            logging.info("PDF is normal ... ")
+            logging.info("Extracting the text ...")
             text_data = extract_text_and_summarize(file_path)
-            image_data = extractor.extract_images(file_path, text_data)
-            combined_data = combine_page_and_image_data(text_data, image_data)
-            return {"status": "success", "title": file_path.name, "extracted data": combined_data}
+            logging.info("Extracting the images and their clean text ...")
+            image_data = extract_images(file_path)  # , text_data)
+            logging.info("Combining the data ...")
+            collected_data = combine_page_and_image_data(text_data, image_data)
+
+        return {"status": "success", "title": file_path.name, "extracted data": collected_data}
 
     except Exception as e:
         return {"status": "failure", "error": str(e)}

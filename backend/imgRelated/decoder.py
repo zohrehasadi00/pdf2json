@@ -50,7 +50,7 @@ def run_length_decode(data: bytes) -> bytes:
     return bytes(output)
 
 
-def _decode_image(obj) -> Image.Image | None:
+def decode_image(obj) -> Image.Image | None:
     """
     Decodes a PDF image object into a PIL Image.
 
@@ -69,8 +69,16 @@ def _decode_image(obj) -> Image.Image | None:
             return None
 
         filter_type = obj["/Filter"]
+        # print(filter_type)
+
+        # if isinstance(filter_type, list):
+        #     filter_type = filter_type[0]
+        #     print(filter_type)
 
         if filter_type == "/DCTDecode":  # JPEG
+            # img = Image.open(BytesIO(data))
+            # img.show()
+            # return img
             return Image.open(BytesIO(data))
         elif filter_type == "/JPXDecode":  # JPEG 2000
             return Image.open(BytesIO(data))
@@ -116,6 +124,10 @@ def _decode_image(obj) -> Image.Image | None:
                 return None
         elif filter_type == "/Crypt":
             logging.warning("Encrypted image detected. Cannot decode without decryption.")
+            return None
+        elif filter_type == ['/FlateDecode']:
+            return None
+        elif filter_type == ['/DCTDecode']:
             return None
         else:
             logging.warning(f"Unsupported image filter: {filter_type}")
