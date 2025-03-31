@@ -1,9 +1,9 @@
 from openai import OpenAI
+from secret import OPENAI_KEY
 
 
-def cleaning(text, model="gpt-4"):  # gpt-4-turbo
-    client = OpenAI(
-        api_key='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')
+def cleaning(text, model="gpt-4-turbo"):
+    client = OpenAI(api_key=OPENAI_KEY)
     try:
         response = client.chat.completions.create(
             model=model,
