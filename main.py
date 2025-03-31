@@ -12,7 +12,7 @@ from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
 os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
-
+save_to = None
 app = FastAPI(
     title="Document Processing API",
     description="An API for processing PDFs",
@@ -38,40 +38,37 @@ async def process_pdf(file: UploadFile = File(...)):
 
 
 async def main():
-
+    global save_to
     try:
+        logging.info("API server started ...")
         server_thread = threading.Thread(target=uvicorn.run,
                                          kwargs={"app": app, "host": "0.0.0.0", "port": 8000})
         server_thread.daemon = True
         server_thread.start()
 
-        logging.info("API server started ...")
-        logging.info("Launching GUI ...")
-
-        gui = papaias()
-
-        start_time = time.perf_counter()
-
-        if not gui:
-            logging.info("User canceled the process.")
-
-        else:
-            pdf_path = gui[0]
-            global save_to
-            save_to = gui[1]
-
-            if pdf_path:
-                file_name = pdf_path.name
-                file_content = pdf_path.read_bytes()
-                upload_file = UploadFile(filename=file_name, file=io.BytesIO(file_content))
-
-                await extract_text_from_pdf(upload_file, save_to)
-
-            else:
-                logging.info("No file has been selected ... Exiting")
-
     except Exception as e:
         logging.info(f"Connection to the uvicorn was not possible\n{e}")
+
+    logging.info("Launching GUI ...")
+
+    gui = papaias()
+    start_time = time.perf_counter()
+
+    if not gui:
+        logging.info("User canceled the process.")
+
+    else:
+
+        pdf_path = gui[0]
+        save_to = gui[1]
+
+        if pdf_path:
+            file_name = pdf_path.name
+            file_content = pdf_path.read_bytes()
+            upload_file = UploadFile(filename=file_name, file=io.BytesIO(file_content))
+            await extract_text_from_pdf(upload_file, save_to)
+        else:
+            logging.info("No file has been selected ... Exiting")
 
     duration = timedelta(seconds=time.perf_counter() - start_time)
     logging.info(f"Processing the pdf took: {duration}")
