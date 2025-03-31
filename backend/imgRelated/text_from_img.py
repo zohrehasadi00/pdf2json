@@ -3,6 +3,8 @@ from PIL import Image
 from models.base_ocr_model import BaseOcrModel
 from models.gpt4_cleaning_text import cleaning
 from models.tesseract_ocr_model import TesseractOcrModel
+from backend.imgRelated.preprocess import preprocess_image
+
 
 
 def extract_text_from_image(image: Image.Image) -> str:
@@ -18,6 +20,7 @@ def extract_text_from_image(image: Image.Image) -> str:
     ocr_model = TesseractOcrModel(BaseOcrModel)
 
     try:
+        image = preprocess_image(image)
         text = ocr_model.predict(image)
         text = cleaning(text).replace("\n", "").replace("%) Thieme Compliance", "No text found")
         return text
