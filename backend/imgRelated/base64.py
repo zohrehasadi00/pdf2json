@@ -1,5 +1,4 @@
 import base64
-import PyPDF2
 import logging
 from PIL import Image
 from io import BytesIO

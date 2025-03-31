@@ -1,7 +1,8 @@
 import logging
 from PIL import Image
-from models.tesseract_ocr_model import TesseractOcrModel
 from models.base_ocr_model import BaseOcrModel
+from models.gpt4_cleaning_text import cleaning
+from models.tesseract_ocr_model import TesseractOcrModel
 
 
 def extract_text_from_image(image: Image.Image) -> str:
@@ -18,9 +19,7 @@ def extract_text_from_image(image: Image.Image) -> str:
 
     try:
         text = ocr_model.predict(image)
-        text = text.replace("\n\n", "__")
-        text = text.replace("\n", "")
-        text = text.replace("%) Thieme Compliance", "No text found")
+        text = cleaning(text).replace("\n", "").replace("%) Thieme Compliance", "No text found")
         return text
     except Exception as e:
         logging.error(f"Error extracting text from image: {str(e)}")

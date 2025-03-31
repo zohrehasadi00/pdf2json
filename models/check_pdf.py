@@ -1,21 +1,21 @@
-import re
+from pdfminer.pdfpage import PDFPage
+from pdfminer.pdfparser import PDFParser
+from pdfminer.pdfdocument import PDFDocument
 from pdfminer.high_level import extract_text
 from pdfminer.pdfparser import PDFSyntaxError
-from pdfminer.pdfdocument import PDFDocument
-from pdfminer.pdfpage import PDFPage
-from pdfminer.pdfinterp import PDFResourceManager
-from pdfminer.pdfpage import PDFTextExtractionNotAllowed
-from pdfminer.converter import PDFPageAggregator
 from pdfminer.layout import LTTextBox, LTChar
-from pdfminer.pdfparser import PDFParser
+from pdfminer.converter import PDFPageAggregator
+from pdfminer.pdfinterp import PDFResourceManager
 from pdfminer.pdfinterp import PDFPageInterpreter
+from pdfminer.pdfpage import PDFTextExtractionNotAllowed
 
 
 def check(pdf_path):
     try:
         extracted_text = extract_text(pdf_path)
-        if re.search(r"cid:\d+", extracted_text):
+        if extracted_text.lower().startswith("(cid:"):
             return True
+
         with open(pdf_path, "rb") as f:
             parser = PDFParser(f)
             doc = PDFDocument(parser)

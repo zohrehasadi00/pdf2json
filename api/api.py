@@ -1,14 +1,13 @@
 import os
-import tempfile
-import shutil
 import json
-import logging
-from pathlib import Path
-from fastapi import APIRouter, UploadFile, HTTPException
-from backend.pdf_processor import process_pdf
-import requests
+import shutil
 import socket
-
+import logging
+import requests
+import tempfile
+from pathlib import Path
+from backend.pdf_processor import process_pdf
+from fastapi import APIRouter, UploadFile, HTTPException
 
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
@@ -28,7 +27,6 @@ async def extract_text_from_pdf(file: UploadFile, save_to:Path):
 
     temp_dir = tempfile.mkdtemp()
     temp_file_path = Path(temp_dir) / file.filename
-    # logger.debug(f"Temporary file path: {temp_file_path}")
 
     try:
         with open(temp_file_path, "wb") as temp_file:
@@ -37,12 +35,12 @@ async def extract_text_from_pdf(file: UploadFile, save_to:Path):
 
         pdf_results = process_pdf(temp_file_path)
 
-        file_name = "response.json"
-        output_path = Path(save_to) / file_name
+        file_name = file.filename
+        name_only = os.path.splitext(file_name)[0] + ".json"
+        output_path = Path(save_to) / name_only
 
         with open(output_path, "w", encoding="utf-8") as json_file:
             json.dump(pdf_results, json_file, ensure_ascii=False, indent=4)
-        # logger.info(f"Saved JSON response to: {output_path}")
 
         with open(temp_file_path, "rb") as file_to_send:
             files = {"file": (file.filename, file_to_send, "application/pdf")}
@@ -79,7 +77,7 @@ def get_actual_api_port():
     try:
         socket.setdefaulttimeout(1)
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.bind(("127.0.0.1", 0))  # 0 means OS picks an available port
+        s.bind(("0.0.0.0", 0))  # 0 means OS picks an available port
         actual_port = s.getsockname()[1]
         s.close()
         return actual_port
