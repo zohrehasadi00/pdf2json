@@ -1,7 +1,10 @@
 import logging
-from typing import Dict, List
-from models.gpt4_summary import summarize_text
 import pdfplumber
+from typing import Dict, List
+from langdetect import detect
+from models.gpt4_summary import summarize_text
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from models.nlp_paragraph_detection import segment_paragraphs_textrank
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -12,25 +15,31 @@ def extract_text_and_summarize(file_path) -> List[Dict]:
     page_data = []
 
     with pdfplumber.open(file_path) as pdf:
+
         for page in pdf.pages:
             try:
                 text = page.extract_text()
                 if not text:
-                    page_data.append({"page": page.page_number, "data": {"paragraphs": [], "sections": []}})
+                    page_data.append({"page": page.page_number, "data": {"paragraphs": []}})
                     continue
 
-                text = text.lower()
-                paragraphs = [p.strip() for p in text.split("\n\n") if p.strip()]
+                text = text.lower().replace("\n", " \n ")
+                language = detect(text)
+                paragraphs = segment_paragraphs_textrank(text, language)
                 summarized_paragraphs = []
 
-                for paragraph in paragraphs:
-                    try:
-                        summary = summarize_text(paragraph)
-                    except Exception as e:
-                        logging.error(f"Error summarizing: {str(e)}")
-                        summary = "Summarization failed"
+                with ThreadPoolExecutor() as executor:
+                    future_to_paragraph = {executor.submit(summarize_paragraph, paragraph): paragraph for paragraph in
+                                           paragraphs}
 
-                    summarized_paragraphs.append({"paragraph": paragraph, "summary": summary})
+                    for future in as_completed(future_to_paragraph):
+                        try:
+                            summary = future.result()
+                            summarized_paragraphs.append({"paragraph": future_to_paragraph[future], "summary": summary})
+                        except Exception as e:
+                            logging.error(f"Error summarizing: {str(e)}")
+                            summarized_paragraphs.append(
+                                {"paragraph": future_to_paragraph[future], "summary": "Summarization failed"})
 
                 page_data.append({"page": page.page_number, "data": {"paragraphs": summarized_paragraphs}})
 
@@ -40,3 +49,12 @@ def extract_text_and_summarize(file_path) -> List[Dict]:
                                   "data": {"text": "Error reading page", "summary": "No summary available"}})
 
     return page_data
+
+
+def summarize_paragraph(paragraph: str) -> str:
+    """Helper function to get the summarization."""
+    try:
+        return summarize_text(paragraph)
+    except Exception as e:
+        logging.error(f"Error summarizing paragraph: {str(e)}")
+        return "Summarization failed"
