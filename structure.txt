@@ -1,4 +1,4 @@
-MediLink/
+pdf2json/
 ├── api/
 │   ├── __init__.py
 │   ├── api.py

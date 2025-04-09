@@ -9,7 +9,13 @@ def cleaning(text, model="gpt-4-turbo"):
             model=model,
             messages=[
                 {"role": "system",
-                 "content": "Clean this text by removing extra whitespace, fixing typos, and improving readability while preserving meaning. Return only cleaned text."},
+                 "content": "Clean this text by removing extra whitespace, "
+                            "fixing typos (if language is german, fix words with ä, ö, ü, and ß), "
+                            "and improving readability while preserving meaning."
+                            "Please normalize hyphenated line-breaks in words, such as changing aufklä-rungsgesprächs to aufklärungsgesprächs, "
+                            "or ef-fective to effective"
+                            "and reconstruct all broken German compound words accordingly."
+                            " Return only cleaned text."},
                 {"role": "user", "content": text}
             ],
             temperature=0.3

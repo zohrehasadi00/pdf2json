@@ -1,9 +1,9 @@
 import logging
 from pathlib import Path
-from models.check_pdf import check
+from backend.check_pdf import check
 from backend.scanned_pdfs.cid_pdf import process_data
-from backend.normal_pdfs.image_extractor import extract_images
-from backend.normal_pdfs.text_extractor import extract_text_and_summarize
+from backend.native_pdfs.image_extractor import extract_images
+from backend.native_pdfs.text_extractor import extract_text_and_summarize
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -24,7 +24,6 @@ def combine_page_and_image_data(page_data, img_data):
                     formatted_images.append({
                         "base64 of image": image_info["base64 of image"],
                         "extracted text from image": image_info["extracted text from image"]
-                        # "related paragraph": image_info["related paragraph/s"]
                     })
 
         combined_data.append({
@@ -49,11 +48,13 @@ def process_pdf(file_path: Path) -> dict:
             collected_data = process_data(file_path)
 
         else:
-            logging.info("PDF is normal ... ")
+            logging.info("It is a native PDF ... ")
             logging.info("Extracting the text ...")
             text_data = extract_text_and_summarize(file_path)
+
             logging.info("Extracting the images and their clean text ...")
-            image_data = extract_images(file_path)  # , text_data)
+            image_data = extract_images(file_path)
+
             logging.info("Combining the data ...")
             collected_data = combine_page_and_image_data(text_data, image_data)
 

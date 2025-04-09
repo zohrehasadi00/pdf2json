@@ -15,7 +15,7 @@ def summarize_text(text):
         "en": "Please summarize the following text in English:\n\n{text}",
         "de": "Bitte fassen Sie den folgenden Text auf Deutsch zusammen:\n\n{text}",
     }
-    prompt = language_prompts.get(language, "Please summarize the following text in English:\n\n{text}")
+    prompt = language_prompts.get(language, "Please summarize the following text in English:\n\n{text}\n\n If text is not clear at all, return 'Text was not clear'")
     prompt = prompt.format(text=text)
     response = client.chat.completions.create(
         model="gpt-4",

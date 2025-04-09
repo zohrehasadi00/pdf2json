@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 import pdfplumber
-from backend.normal_pdfs.text_extractor import extract_text_and_summarize
+from backend.native_pdfs.text_extractor import extract_text_and_summarize
 
 
 def test_text():

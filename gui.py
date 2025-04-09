@@ -19,9 +19,9 @@ def resize_image(image_path, target_width, target_height):
 
 def papaias() -> List:
     sg.theme("Green")
-    resized_image = resize_image(r"C:\Users\zohre\bachelorT\MediLink\fu-logo.png", 500, 170)
+    resized_image = resize_image(r"C:\Users\zohre\bachelorT\pdf2json\fu-logo.png", 500, 170)
     layout = [
-        [sg.Text("MediLink - Freie Universität, Berlin", justification="center", size=(50, 1), font=("Helvetica", 20))],
+        [sg.Text("pdf2json - Freie Universität, Berlin", justification="center", size=(50, 1), font=("Helvetica", 20))],
         [sg.Image(data=resized_image, pad=((42, 0), (20, 20)))],
         [sg.Text("PDF file:", size=(6, 1), font=("Helvetica", 12, "bold")),
          sg.InputText(key="file_path", enable_events=True, visible=True, size=(57, 70), pad=((0, 0), (30, 30))),

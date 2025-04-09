@@ -69,17 +69,16 @@ def decode_image(obj) -> Image.Image | None:
             return None
 
         filter_type = obj["/Filter"]
-        # print(filter_type)
 
-        # if isinstance(filter_type, list):
-        #     filter_type = filter_type[0]
-        #     print(filter_type)
+        if isinstance(filter_type, list):
+            filter_type = filter_type[0]
+            # print(filter_type)
 
         if filter_type == "/DCTDecode":  # JPEG
-            # img = Image.open(BytesIO(data))
+            img = Image.open(BytesIO(data))
             # img.show()
-            # return img
-            return Image.open(BytesIO(data))
+            return img
+            # return Image.open(BytesIO(data))
         elif filter_type == "/JPXDecode":  # JPEG 2000
             return Image.open(BytesIO(data))
         elif filter_type == "/FlateDecode":  # PNG-like

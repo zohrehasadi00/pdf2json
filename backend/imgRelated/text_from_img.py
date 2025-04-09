@@ -1,11 +1,17 @@
 import logging
-from PIL import Image
 from models.base_ocr_model import BaseOcrModel
-from models.gpt4_cleaning_text import cleaning
+from PIL import Image, ImageFilter, ImageEnhance
 from models.tesseract_ocr_model import TesseractOcrModel
-from backend.imgRelated.preprocess import preprocess_image
 
 
+def preprocess_image(image: Image.Image) -> Image.Image:
+
+    image = image.convert('L')  # Convert to grayscale
+    enhancer = ImageEnhance.Contrast(image)
+    image = enhancer.enhance(3.0)  # Increase contrast by a factor of 3
+    image = image.point(lambda p: p > 128 and 255)   # Convert to black & white
+
+    return image
 
 def extract_text_from_image(image: Image.Image) -> str:
     """
@@ -22,7 +28,10 @@ def extract_text_from_image(image: Image.Image) -> str:
     try:
         image = preprocess_image(image)
         text = ocr_model.predict(image)
-        text = cleaning(text).replace("\n", "").replace("%) Thieme Compliance", "No text found")
+
+        if text is None:
+            return ""
+        text = text.replace("\n", "").lower()
         return text
     except Exception as e:
         logging.error(f"Error extracting text from image: {str(e)}")

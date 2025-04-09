@@ -24,5 +24,5 @@ def image_to_base64(image: Image.Image) -> str:
         return base64.b64encode(buffer.read()).decode("utf-8")
 
     except Exception as e:
-        logging.error(f"Error converting image to base64: {str(e)}")
+        logging.error(f"Error encoding image to base64: {str(e)}")
         return ""
