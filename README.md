@@ -1,5 +1,5 @@
 # <span style="color:#3271a5">pdf2json</span>  
-<span style="color:white">An Intelligent Docker-Based Pipeline for Document Processing with computer vision and NLP for efficient data management</span>  
+<span style="color:white">An Intelligent Docker-Based Pipeline for Document Processing with OCR and NLP for efficient data management</span>  
 
 ## <span style="color:#3271a5">Overview</span>  
 <span style="color:white">pdf2json is an automated, intelligent pipeline designed to streamline data management. It leverages computer vision and natural language processing (NLP) to extract, process, and structure information from PDF documents. This tool facilitates efficient handling of text and images, offering an organized, JSON-based output to support several kind of workflows.
