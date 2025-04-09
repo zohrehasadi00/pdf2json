@@ -10,7 +10,7 @@ def preprocess_image(image: Image.Image) -> Image.Image:
     enhancer = ImageEnhance.Contrast(image)
     image = enhancer.enhance(3.0)  # Increase contrast by a factor of 3
     image = image.point(lambda p: p > 128 and 255)   # Convert to black & white
-
+    # image.show()
     return image
 
 def extract_text_from_image(image: Image.Image) -> str:
@@ -26,7 +26,8 @@ def extract_text_from_image(image: Image.Image) -> str:
     ocr_model = TesseractOcrModel(BaseOcrModel)
 
     try:
-        image = preprocess_image(image)
+        # image.show()
+        # image = preprocess_image(image)
         text = ocr_model.predict(image)
 
         if text is None:

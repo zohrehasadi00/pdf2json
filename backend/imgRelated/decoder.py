@@ -69,6 +69,7 @@ def decode_image(obj) -> Image.Image | None:
             return None
 
         filter_type = obj["/Filter"]
+        # print(filter)
 
         if isinstance(filter_type, list):
             filter_type = filter_type[0]

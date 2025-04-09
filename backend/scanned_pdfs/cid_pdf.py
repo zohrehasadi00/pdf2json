@@ -16,6 +16,7 @@ def convert_pdf_to_images(pdf_path):
         page = pdf_document[page_num]
         pix = page.get_pixmap()
         img = Image.open(io.BytesIO(pix.tobytes("png")))
+        # img.show()
         images.append((page_num + 1, img))
     return images
 
