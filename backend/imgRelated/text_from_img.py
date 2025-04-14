@@ -27,7 +27,7 @@ def extract_text_from_image(image: Image.Image) -> str:
 
     try:
         # image.show()
-        # image = preprocess_image(image)
+        image = preprocess_image(image)
         text = ocr_model.predict(image)
 
         if text is None:

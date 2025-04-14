@@ -19,7 +19,7 @@ def resize_image(image_path, target_width, target_height):
 
 def papaias() -> List:
     sg.theme("Green")
-    resized_image = resize_image(r"C:\Users\zohre\bachelorT\pdf2json\fu-logo.png", 500, 170)
+    resized_image = resize_image("fu-logo.png", 500, 170)        # r"C:\Users\zohre\bachelorT\pdf2json\
     layout = [
         [sg.Text("pdf2json - Freie Universität, Berlin", justification="center", size=(50, 1), font=("Helvetica", 20))],
         [sg.Image(data=resized_image, pad=((42, 0), (20, 20)))],
@@ -35,7 +35,7 @@ def papaias() -> List:
          sg.Button("Cancel", key="exit", size=(20, 2), button_color="red", font=("Helvetica", 12, "bold"))]
     ]
 
-    window = sg.Window("PDF Auswahl", layout, size=(600, 470))
+    window = sg.Window("PDF Auswahl", layout, size=(700, 500))
 
     while True:
         event, values = window.read()

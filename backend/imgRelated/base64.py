@@ -15,6 +15,7 @@ def image_to_base64(image: Image.Image) -> str:
         str: The Base64-encoded string, or an empty string on failure.
     """
     try:
+        logging.info("Converting image to base64")
         if image.mode == "CMYK":
             image = image.convert("RGB")
 

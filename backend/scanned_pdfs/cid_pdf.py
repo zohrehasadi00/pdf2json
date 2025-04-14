@@ -31,6 +31,7 @@ def process_single_page(args):
     try:
         base64_image = image_to_base64(image)
         extracted_text = extract_text_from_image(image)
+        extracted_text = cleaning(extracted_text).encode('utf-8').decode('unicode_escape')
         return (page_number, base64_image, extracted_text)
     except Exception as e:
         logging.warning(f"Failed to process page {page_number}: {str(e)}")
@@ -43,7 +44,7 @@ def process_data(pdf_path):
     logging.info(f"Converted {len(image_pages)} pages to images.")
 
     image_data = []
-    with ThreadPoolExecutor() as executor:
+    with ThreadPoolExecutor(max_workers=4) as executor:
         futures = [executor.submit(process_single_page, (page_num, image))
                    for page_num, image in image_pages]
 
@@ -51,6 +52,7 @@ def process_data(pdf_path):
             result = future.result()
             if result is not None:
                 image_data.append(result)
+
 
     logging.info("Starting summarization of extracted text...")
     page_images = {}
@@ -61,15 +63,24 @@ def process_data(pdf_path):
             for page_num, base64_img, text in image_data
         }
 
+        logging.info(f"Submitted {len(summary_futures)} tasks to the executor.")
+
         for future in as_completed(summary_futures):
             page_num, base64_img, text = summary_futures[future]
+            logging.debug(f"Processing page {page_num}...")
+
             try:
                 summary = future.result()
+                logging.info(f"Summary generated for page {page_num}.")
+
                 page_images[f"Page{page_num}"] = {
                     "base64 of image": base64_img,
                     "extracted text from image": text,
                     "summary": summary
                 }
+
+                logging.debug(f"Page {page_num} added to page_images.")
+
             except Exception as e:
                 logging.error(f"Error summarizing page {page_num}: {str(e)}")
 
