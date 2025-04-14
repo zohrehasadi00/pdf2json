@@ -124,11 +124,15 @@
         git clone https://github.com/zohrehasadi00/pdf2json.git
         cd pdf2json
 
-### <span style="color:#3271a5">3. Docker </span>
+### <span style="color:#3271a5">3. X Server </span>
+If you use Windows you'll need to install X server. 
+[How to Install and Run X Server in Windows 11?](https://dev.to/winsides/how-to-install-and-run-x-server-in-windows-11-4na9)
+
+### <span style="color:#3271a5">4. Docker </span>
 - Run the Application
   ```bash
   docker build -t myapp . 
-  docker run -d -p 8000:8000 --name myapp_container myapp
+  docker run -it -e DISPLAY=host.docker.internal:0.0 -p 8000:8000 myapp
   ```
 - Access the app at: http://localhost:8000
 - stop the Container:
