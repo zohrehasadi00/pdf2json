@@ -1,5 +1,5 @@
 class BaseOcrModel:
-    """Base class for OCR models."""
+    """Base class for OCR models: Future plan; useful when multiple engines exist"""
 
     def predict(self, image):
         """
@@ -7,4 +7,4 @@ class BaseOcrModel:
         :param image: PIL Image to extract text from.
         :return: Extracted text as a string.
         """
-        raise NotImplementedError("Subclasses must implement the `predict` method.")
+        pass
