@@ -10,16 +10,27 @@ from models.gpt4_cleaning_text import cleaning
 from concurrent.futures import ProcessPoolExecutor
 
 
+def should_clean(text: str) -> bool:
+    """Decide if text should be cleaned."""
+    return text.strip() and len(text.strip()) >= 10
+
+
 def clean_page_texts(page: Dict) -> Dict:
     """
-    Applies cleaning to all 'extracted text from image' fields in a single page.
+    Applies cleaning to all 'extracted text from image' fields in a single page,
+    only if the text is not empty or too short.
     """
     page_copy = dict(page)
     for key, value in page.items():
         if key.startswith("image") and "extracted text from image" in value:
-            value_copy = dict(value)
-            value_copy["extracted text from image"] = cleaning(value["extracted text from image"])
-            page_copy[key] = value_copy
+            original_text = value["extracted text from image"]
+            if should_clean(original_text):
+                logging.info(f"Cleaning text for {key} in {page.get('page')}")
+                value_copy = dict(value)
+                value_copy["extracted text from image"] = cleaning(original_text)
+                page_copy[key] = value_copy
+            # else:
+            #     logging.info(f"Skipping cleaning for {key} in {page.get('page')} — text too short or empty")
     return page_copy
 
 
@@ -41,7 +52,7 @@ def extract_images(file_path: Path) -> List[Dict]:
             reader = PyPDF2.PdfReader(f)
 
             for page_number, page in enumerate(reader.pages, 1):
-                logging.info(f"extract image data page {page_number}")
+                logging.info(f"Extracting information from image(s) on page {page_number}")
 
                 resources = page.get("/Resources")
                 if isinstance(resources, IndirectObject):
@@ -87,7 +98,6 @@ def extract_images(file_path: Path) -> List[Dict]:
     except Exception as e:
         logging.error(f"Error extracting images from PDF {file_path}: {str(e)}")
 
-    # Post-process all extracted texts using multiprocessing (ordered)
     with ProcessPoolExecutor() as executor:
         cleaned_pages = list(executor.map(clean_page_texts, pages))
 
