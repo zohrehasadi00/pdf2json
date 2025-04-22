@@ -4,6 +4,7 @@ from backend.check_pdf import check
 from backend.scanned_pdfs.cid_pdf import process_data
 from backend.native_pdfs.image_extractor import extract_images
 from backend.native_pdfs.text_extractor import extract_text_and_summarize
+from concurrent.futures import ThreadPoolExecutor
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -42,18 +43,20 @@ def process_pdf(file_path: Path) -> dict:
         raise FileNotFoundError(f"File not found: {file_path}")
 
     try:
-        logging.info("Checking whether the PDF is scanned ... ")
+        logging.info("Checking PDF's kind ... ")
         if check(file_path):
             logging.info("PDF is scanned. Using OCR ... ")
             collected_data = process_data(file_path)
 
         else:
             logging.info("It is a native PDF ... ")
-            logging.info("Extracting the text ...")
-            text_data = extract_text_and_summarize(file_path)
 
-            logging.info("Extracting the images and their clean text ...")
-            image_data = extract_images(file_path)
+            with ThreadPoolExecutor(max_workers=4) as executor:
+                future_text = executor.submit(extract_text_and_summarize, file_path)
+                future_images = executor.submit(extract_images, file_path)
+
+                text_data = future_text.result()
+                image_data = future_images.result()
 
             logging.info("Combining the data ...")
             collected_data = combine_page_and_image_data(text_data, image_data)
