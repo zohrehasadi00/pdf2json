@@ -1,6 +1,7 @@
 import logging
 from models.base_ocr_model import BaseOcrModel
 from PIL import Image, ImageFilter, ImageEnhance
+from models.gpt4_cleaning_text import cleaning
 from models.tesseract_ocr_model import TesseractOcrModel
 
 
@@ -27,13 +28,15 @@ def extract_text_from_image(image: Image.Image) -> str:
 
     try:
         # image.show()
-        image = preprocess_image(image)     #how [not] having preprocessing changes the results??
+        image = preprocess_image(image)
         text = ocr_model.predict(image)
 
         if text is None:
             return ""
-        text = text.replace("\n", "").lower()
+
+        text = text.replace("–", " ").replace("- ", " ").replace(".", " ").replace(":", " ").replace("/", " ").lower().replace("\n", " ").replace("  ", " ").strip()
         return text
+
     except Exception as e:
         logging.error(f"Error extracting text from image: {str(e)}")
         return ""

@@ -5,8 +5,22 @@ import PyPDF2
 from PyPDF2.generic import IndirectObject
 from backend.imgRelated.decoder import decode_image
 from backend.imgRelated.base64 import image_to_base64
-
 from backend.imgRelated.text_from_img import extract_text_from_image
+from models.gpt4_cleaning_text import cleaning
+from concurrent.futures import ProcessPoolExecutor
+
+
+def clean_page_texts(page: Dict) -> Dict:
+    """
+    Applies cleaning to all 'extracted text from image' fields in a single page.
+    """
+    page_copy = dict(page)
+    for key, value in page.items():
+        if key.startswith("image") and "extracted text from image" in value:
+            value_copy = dict(value)
+            value_copy["extracted text from image"] = cleaning(value["extracted text from image"])
+            page_copy[key] = value_copy
+    return page_copy
 
 
 def extract_images(file_path: Path) -> List[Dict]:
@@ -27,6 +41,8 @@ def extract_images(file_path: Path) -> List[Dict]:
             reader = PyPDF2.PdfReader(f)
 
             for page_number, page in enumerate(reader.pages, 1):
+                logging.info(f"extract image data page {page_number}")
+
                 resources = page.get("/Resources")
                 if isinstance(resources, IndirectObject):
                     resources = resources.get_object()
@@ -56,8 +72,6 @@ def extract_images(file_path: Path) -> List[Dict]:
                         base64_image = image_to_base64(image)
                         extracted_text = extract_text_from_image(image)
 
-
-
                         page_images[f"image{image_count}"] = {
                             "base64 of image": base64_image,
                             "extracted text from image": extracted_text,
@@ -73,4 +87,8 @@ def extract_images(file_path: Path) -> List[Dict]:
     except Exception as e:
         logging.error(f"Error extracting images from PDF {file_path}: {str(e)}")
 
-    return pages
+    # Post-process all extracted texts using multiprocessing (ordered)
+    with ProcessPoolExecutor() as executor:
+        cleaned_pages = list(executor.map(clean_page_texts, pages))
+
+    return cleaned_pages
