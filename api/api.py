@@ -55,7 +55,7 @@ async def extract_text_from_pdf(file: UploadFile, save_to:Path):
         else:
             logger.error(f"API Error: {response.status_code} - {response.text}")
 
-        print(json.dumps(pdf_results, indent=4))
+        # print(json.dumps(pdf_results, indent=4))
         return pdf_results
 
     except Exception as e:

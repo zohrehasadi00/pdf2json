@@ -20,12 +20,12 @@ def segment_paragraphs_textrank(text, language):
         language = "german"
 
     if language not in ["english", "german"]:
-        raise ValueError("Only 'english' and 'german' languages are supported.")
+        raise ValueError("Only 'English' and 'German' languages are supported.")
 
     parser = PlaintextParser.from_string(text, Tokenizer(language))
     summarizer = LexRankSummarizer()
 
-    num_sentences = max(1, len(parser.document.sentences) // 4)  # Dynamically adjust paragraph size
+    num_sentences = max(1, len(parser.document.sentences) // 4)
 
     key_sentences = summarizer(parser.document, num_sentences)
 
