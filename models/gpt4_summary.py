@@ -15,10 +15,14 @@ def summarize_text(text):
         "en": "Please summarize the following text in English:\n\n{text}",
         "de": "Bitte fassen Sie den folgenden Text auf Deutsch zusammen:\n\n{text}",
     }
-    prompt = language_prompts.get(language, "Please summarize the following text in English:\n\n{text}\n\n If text is not clear at all, return 'Text was not clear'")
+    if language in language_prompts:
+        prompt = language_prompts[language]
+    else:
+        prompt = f"Please summarize the following text (detected language: {language}):\n\n{{text}}"
+
     prompt = prompt.format(text=text)
     response = client.chat.completions.create(
-        model="gpt-4",
+        model="gpt-4o-mini",
         messages=[
             {"role": "system", "content": "You are a helpful assistant that summarizes texts."},
             {"role": "user", "content": prompt}
@@ -29,3 +33,5 @@ def summarize_text(text):
 
     summary = response.choices[0].message.content.strip()
     return summary
+
+
