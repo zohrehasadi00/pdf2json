@@ -6,10 +6,9 @@ pdf2json/
 │   ├── imgRelated/
 │   │   ├── __init__.py
 │   │   ├── base64.py
-│   │   ├── connectionToImg.py
 │   │   ├── decoder.py
 │   │   ├── text_from_img.py
-│   ├── normal_pdfs/
+│   ├── native_pdfs/
 │   │   ├── __init__.py
 │   │   ├── image_extractor.py
 │   │   ├── text_extractor.py
@@ -18,18 +17,22 @@ pdf2json/
 │   │   ├── cid_pdf.py
 │   ├── __init__.py
 │   ├── pdf_processor.py
+│   ├── check_pdf.py
 ├── models/
 │   ├── __init__.py
 │   ├── base_ocr_model.py
-│   ├── blip_model.py
-│   ├── check_pdf.py
 │   ├── gpt4_cleaning_text.py
 │   ├── gpt4_summary.py
+│   ├── nlp_paragraph_detection.py
 │   ├── tesseract_ocr_model.py
+├── statics/
+│   ├── List of PDFs
 ├── tests/
 │   ├── __init__.py
-│   ├── test_accurancy_extracted_text.py
+│   ├── test_accuracy_extracted_text.py
+│   ├── test_accuracy_extracted_text_from_img.py
 │   ├── test_count_images.py
+│   ├── test_psm.py
 ├── dockerfile
 ├── fu-logo.png
 ├── gui.py
