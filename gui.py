@@ -19,7 +19,7 @@ def resize_image(image_path, target_width, target_height):
 
 def papaias() -> List:
     sg.theme("Green")
-    resized_image = resize_image("fu-logo.png", 500, 170)        # r"C:\Users\zohre\bachelorT\pdf2json\
+    resized_image = resize_image("fu-logo.png", 500, 170)
     layout = [
         [sg.Text("pdf2json - Freie Universität, Berlin", justification="center", size=(50, 1), font=("Helvetica", 20))],
         [sg.Image(data=resized_image, pad=((42, 0), (20, 20)))],

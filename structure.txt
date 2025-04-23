@@ -33,6 +33,7 @@ pdf2json/
 │   ├── test_accuracy_extracted_text_from_img.py
 │   ├── test_count_images.py
 │   ├── test_psm.py
+│   ├── test_resize_image.py
 ├── dockerfile
 ├── fu-logo.png
 ├── gui.py
