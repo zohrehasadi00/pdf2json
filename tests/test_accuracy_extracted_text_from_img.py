@@ -7,6 +7,7 @@ from typing import List
 from models.tesseract_ocr_model import TesseractOcrModel
 from models.base_ocr_model import BaseOcrModel
 
+
 def extract_images_from_pdf(pdf_path: Path) -> List[Image.Image]:
     """Extract images from a given PDF file."""
     images = []
@@ -20,12 +21,14 @@ def extract_images_from_pdf(pdf_path: Path) -> List[Image.Image]:
             images.append(pil_image)
     return images
 
+
 def compare_text_accuracy(real_text: str, extracted_text: str) -> float:
     """Compare real and extracted text to calculate accuracy."""
     real_words = real_text.split()
     extracted_words = extracted_text.split()
     common_words = set(real_words) & set(extracted_words)
     return (len(common_words) / max(len(real_words), 1)) * 100  # Percentage accuracy
+
 
 def test_ocr_accuracy(pdf_path: Path, real_text: str):
     """Test OCR accuracy by extracting images, running OCR, and comparing text."""
@@ -36,8 +39,12 @@ def test_ocr_accuracy(pdf_path: Path, real_text: str):
     print(f"OCR Accuracy: {accuracy:.2f}%")
     return accuracy
 
+
+project_root = Path(__file__).resolve().parent.parent
+
+
 @pytest.mark.parametrize("pdf_path, real_text", [
-    (Path(r"C:\Users\zohre\OneDrive\Desktop\sample_pdfs\test.pdf"),
+    (project_root / "statics" / "sample_pdfs" / "test.pdf",
      "Anesthesia ExplainedGeneral AnesthesiaUnder general anesthesia, you will be in a state of controlled "
      "unconsciousness during which you will not feel or remember anything that happens. This type of "
      "anesthesia is essential for a wide range of surgeries to ensure you experience no pain or awareness "

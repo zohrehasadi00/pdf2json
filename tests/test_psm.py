@@ -10,34 +10,21 @@ import logging
 from datetime import timedelta
 from backend.imgRelated.text_from_img import extract_text_from_image
 from models.gpt4_cleaning_text import cleaning
+from typing import Optional
+
+project_root = Path(__file__).resolve().parent.parent
 
 # Test file pairs (uncomment the pair you want to test)
 test_cases = [
-      #(Path(r"C:\Users\zohre\OneDrive\Desktop\sample_pdfs\text\Aßußfere Wendung.txt"),
-      # Path(r"C:\Users\zohre\OneDrive\Desktop\sample_pdfs\Aßußfere Wendung.pdf")),
-
-    # (Path(r"C:\Users\zohre\OneDrive\Desktop\sample_pdfs\text\Geburtseinleitung.txt"),
-    #  Path(r"C:\Users\zohre\OneDrive\Desktop\sample_pdfs\Geburtseinleitung .pdf")),
-
-    # (Path(r"C:\Users\zohre\OneDrive\Desktop\sample_pdfs\text\Geburtshilf.txt"),
-    #  Path(r"C:\Users\zohre\OneDrive\Desktop\sample_pdfs\Geburtshilfe.pdf")),
-
-     (Path(r"C:\Users\zohre\OneDrive\Desktop\sample_pdfs\text\test.txt"),
-      Path(r"C:\Users\zohre\OneDrive\Desktop\sample_pdfs\test.pdf")),
-
-    # (Path(r"C:\Users\zohre\OneDrive\Desktop\sample_pdfs\text\Kaiserschnitt.txt"),
-    #  Path(r"C:\Users\zohre\OneDrive\Desktop\sample_pdfs\Kaiserschnitt.pdf")),
-
-    # (Path(r"C:\Users\zohre\OneDrive\Desktop\sample_pdfs\text\Narkose.txt"),
-    #  Path(r"C:\Users\zohre\OneDrive\Desktop\sample_pdfs\Narkose.pdf")),
-
-    # (Path(r"C:\Users\zohre\OneDrive\Desktop\sample_pdfs\text\Geburtshilfliche Maßnahmen.txt"),
-    #  Path(r"C:\Users\zohre\OneDrive\Desktop\sample_pdfs\Geburtshilfliche Maßnahmen.pdf")),
-
-     # (Path(r"C:\Users\zohre\OneDrive\Desktop\sample_pdfs\text\Geburtshilfliche_nahmen - edited.txt"),
-     # Path(r"C:\Users\zohre\OneDrive\Desktop\sample_pdfs\Geburtshilfliche_nahmen.pdf"))
-    ]
-
+    # (project_root / "statics" / "Aßußfere Wendung.txt", project_root / "statics" / "Aßußfere Wendung.pdf"),
+    # (project_root / "statics" / "Geburtseinleitung.txt", project_root / "statics" / "Geburtseinleitung .pdf"),
+    # (project_root / "statics" / "Geburtshilf.txt", project_root / "statics" / "Geburtshilfe.pdf"),
+    (project_root / "statics" / "test.txt", project_root / "statics" / "test.pdf"),
+    # (project_root / "statics" / "Kaiserschnitt.txt", project_root / "statics" / "Kaiserschnitt.pdf"),
+    # (project_root / "statics" / "Narkose.txt", project_root / "statics" / "Narkose.pdf"),
+    # (project_root / "statics" / "Geburtshilfliche Maßnahmen.txt", project_root / "statics" / "Geburtshilfliche Maßnahmen.pdf"),
+    # (project_root / "statics" / "Geburtshilfliche_nahmen - edited.txt", project_root / "statics" / "Geburtshilfliche_nahmen.pdf")
+]
 
 def convert_pdf_to_images(pdf_path: Path) -> list[tuple[int, Image.Image]]:
     """Convert PDF pages to PIL Images with page numbers."""
@@ -54,8 +41,7 @@ def convert_pdf_to_images(pdf_path: Path) -> list[tuple[int, Image.Image]]:
         raise
     return images
 
-
-def process_single_page(args: tuple[int, Image.Image]) -> tuple[int, str] | None:
+def process_single_page(args: tuple[int, Image.Image]) -> Optional[tuple[int, str]]:
     """Process a single page image to extract text."""
     page_number, image = args
     try:
@@ -68,7 +54,6 @@ def process_single_page(args: tuple[int, Image.Image]) -> tuple[int, str] | None
         logging.warning(f"Failed to process page {page_number}: {str(e)}")
         return None
 
-
 def combine_ocr_text(ocr_data: list[tuple[int, str]]) -> str:
     """Combine OCR results into a single normalized text string."""
     ocr_data.sort(key=lambda x: x[0])
@@ -76,7 +61,6 @@ def combine_ocr_text(ocr_data: list[tuple[int, str]]) -> str:
     combined = cleaning(combined).replace("–", "").replace("- ", "").replace(".", "").replace(":", "").replace("/", " ").lower().replace("\n", " ").replace("  ", " ").strip()
     print(combined)
     return combined
-
 
 def calculate_accuracy(ground_truth: str, ocr_text: str) -> tuple[float, list[str]]:
     """Calculate word-level accuracy between ground truth and OCR text."""
@@ -88,14 +72,12 @@ def calculate_accuracy(ground_truth: str, ocr_text: str) -> tuple[float, list[st
 
     return round(accuracy, 2), missing_words
 
-
 @pytest.fixture(params=test_cases)
 def test_case(request):
     """Pytest fixture providing test case pairs"""
     text_path, pdf_path = request.param
     with open(text_path, 'r', encoding='utf-8') as f:
         return f.read(), pdf_path
-
 
 def test_ocr_accuracy(test_case):
     """Test OCR accuracy against ground truth text"""
@@ -132,7 +114,6 @@ def test_ocr_accuracy(test_case):
         json.dump(results, f, indent=2, ensure_ascii=False)
 
     assert accuracy > 50.0  # Minimum acceptable accuracy threshold
-
 
 if __name__ == "__main__":
     # For manual testing without pytest

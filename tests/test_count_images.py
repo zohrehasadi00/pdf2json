@@ -1,13 +1,14 @@
 import pytest
 from pathlib import Path
-from backend.native_pdfs.image_extractor import PdfImageTextExtractor
+from backend.native_pdfs.image_extractor import extract_images
 
-executor = PdfImageTextExtractor()
 
 @pytest.fixture
 def pdf_path():
-    return Path(r"C:\Users\zohre\OneDrive\Desktop\bachelorArbeit\statics\sample_pdfs\IntroductionToAnaesthesia.pdf")
-
+    project_root = Path(__file__).resolve().parent.parent
+    return project_root / "statics" / "sample_pdfs" / "IntroductionToAnaesthesia.pdf"
+    # return project_root / "statics" / "sample_pdfs" / "einfluss.pdf"
+    # return project_root / "statics" / "sample_pdfs" / "krebs.pdf"
 
 def test_image_extractor(pdf_path, c=6):
     """
@@ -15,7 +16,7 @@ def test_image_extractor(pdf_path, c=6):
     and check that the image extraction logic works as expected.
     """
 
-    pages = executor.extract_images(pdf_path, [])
+    pages = extract_images(pdf_path)
 
     number_of_images = 0
     for page in pages:
@@ -31,7 +32,3 @@ def test_image_extractor(pdf_path, c=6):
     else:
         print(f"Less images have been detected: {number_of_images}")
         assert number_of_images < c
-
-# pdf_path = Path(r"C:\Users\zohre\OneDrive\Desktop\bachelorArbeit\statics\sample_pdfs\einfluss.pdf") 14
-# pdf_path = "C:\Users\zohre\OneDrive\Desktop\bachelorArbeit\statics\sample_pdfs\IntroductionToAnaesthesia.pdf" 6
-# pdf_path = "C:\Users\zohre\OneDrive\Desktop\bachelorArbeit\statics\sample_pdfs\krebs.pdf" 3
