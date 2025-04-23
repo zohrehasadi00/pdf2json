@@ -19,8 +19,3 @@ COPY . .
 
 EXPOSE 8000
 CMD ["python", "main.py"]
-
-# created images using (only once): docker build -t myapp .
-# run the docker container (every time we need to): docker run -p 8000:8000 myapp
-# docker run -it -e DISPLAY=host.docker.internal:0.0 -p 8000:8000 myapp
-# echo $DISPLAY
