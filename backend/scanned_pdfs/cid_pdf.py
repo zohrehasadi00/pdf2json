@@ -22,8 +22,12 @@ def convert_pdf_to_images(pdf_path):
 
 
 def summarize(extracted_text):
-    cleaned = cleaning(extracted_text)
-    return summarize_text(cleaned)
+    text = extracted_text.strip()
+    if len(text) < 10:
+        return "text is short"
+
+    cleaned = cleaning(text)
+    return summarize_text(cleaned).lower() if len(cleaned) > 200 else "text is short"
 
 
 def process_single_page(args):
@@ -31,8 +35,10 @@ def process_single_page(args):
     try:
         base64_image = image_to_base64(image)
         extracted_text = extract_text_from_image(image)
-        extracted_text = cleaning(extracted_text).encode('utf-8').decode('unicode_escape')
+        extracted_text = cleaning(extracted_text)
+
         return (page_number, base64_image, extracted_text)
+
     except Exception as e:
         logging.warning(f"Failed to process page {page_number}: {str(e)}")
         return None

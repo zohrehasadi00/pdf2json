@@ -77,11 +77,8 @@ def summarize_paragraph(paragraph: str) -> str:
     """Helper function to get the summarization."""
     try:
         text = paragraph.lower()
-        if len(text) > 200:
-            summy = summarize_text(text).lower()
-            return summy
-        else:
-            return "Text is short."
+        return summarize_text(text).lower() if len(text) > 200 else "Text is short."
+
     except Exception as e:
         logging.error(f"Error summarizing paragraph: {str(e)}")
         return "Summarization failed"

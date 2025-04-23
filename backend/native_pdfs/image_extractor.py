@@ -8,6 +8,7 @@ from backend.imgRelated.base64 import image_to_base64
 from backend.imgRelated.text_from_img import extract_text_from_image
 from models.gpt4_cleaning_text import cleaning
 from concurrent.futures import ProcessPoolExecutor
+import json
 
 
 def should_clean(text: str) -> bool:
@@ -17,7 +18,7 @@ def should_clean(text: str) -> bool:
 
 def clean_page_texts(page: Dict) -> Dict:
     """
-    Applies cleaning to all 'extracted text from image' fields in a single page,
+    Applies cleaning and unicode decoding to all 'extracted text from image' fields in a single page,
     only if the text is not empty or too short.
     """
     page_copy = dict(page)
@@ -25,12 +26,10 @@ def clean_page_texts(page: Dict) -> Dict:
         if key.startswith("image") and "extracted text from image" in value:
             original_text = value["extracted text from image"]
             if should_clean(original_text):
-                logging.info(f"Cleaning text for {key} in {page.get('page')}")
                 value_copy = dict(value)
-                value_copy["extracted text from image"] = cleaning(original_text)
+                cleaned = cleaning(original_text)
+                value_copy["extracted text from image"] = cleaned
                 page_copy[key] = value_copy
-            # else:
-            #     logging.info(f"Skipping cleaning for {key} in {page.get('page')} — text too short or empty")
     return page_copy
 
 
@@ -98,7 +97,10 @@ def extract_images(file_path: Path) -> List[Dict]:
     except Exception as e:
         logging.error(f"Error extracting images from PDF {file_path}: {str(e)}")
 
+    logging.info("Cleaning the texts starts ...")
+
     with ProcessPoolExecutor() as executor:
         cleaned_pages = list(executor.map(clean_page_texts, pages))
 
     return cleaned_pages
+
