@@ -1,3 +1,4 @@
+import zlib
 import base64
 import logging
 from PIL import Image
@@ -50,6 +51,27 @@ def run_length_decode(data: bytes) -> bytes:
     return bytes(output)
 
 
+def apply_filters(data: bytes, filters: list) -> bytes:
+    for f in reversed(filters):
+        if f == "/FlateDecode":
+            import zlib
+            data = zlib.decompress(data)
+        elif f == "/LZWDecode":
+            data = lzw_decompress(data)
+        elif f == "/RunLengthDecode":
+            data = run_length_decode(data)
+        elif f == "/ASCIIHexDecode":
+            data = bytes.fromhex(data.decode("ascii").replace(">", ""))
+        elif f == "/ASCII85Decode":
+            data = base64.a85decode(data)
+        elif f == "/DCTDecode":
+            return data
+        else:
+            logging.warning(f"Unsupported or unhandled filter in sequence: {f}")
+            return None
+    return data
+
+
 def decode_image(obj) -> Image.Image | None:
     """
     Decodes a PDF image object into a PIL Image.
@@ -69,17 +91,30 @@ def decode_image(obj) -> Image.Image | None:
             return None
 
         filter_type = obj["/Filter"]
-        # print(filter)
 
-        if isinstance(filter_type, list):
-            filter_type = filter_type[0]
-            # print(filter_type)
+        if isinstance(filter_type, list):  # multiple filters
+            decoded_data = apply_filters(data, filter_type)
+            if decoded_data is None:
+                return None
+            try:
+                return Image.open(BytesIO(decoded_data))
+
+            except Exception:
+                try:
+                    color_space = obj.get("/ColorSpace", "/DeviceRGB")
+                    mode = "RGB" if color_space == "/DeviceRGB" else "L"  # fallback to grayscale
+                    expected_length = width * height * (3 if mode == "RGB" else 1)
+                    if len(decoded_data) < expected_length:
+                        logging.error("Decoded data length mismatch for raw image.")
+                        return None
+                    return Image.frombytes(mode, (width, height), decoded_data)
+                except Exception as e:
+                    logging.error(f"Failed to build image from raw data: {str(e)}")
+                    return None
 
         if filter_type == "/DCTDecode":  # JPEG
-            img = Image.open(BytesIO(data))
-            # img.show()
-            return img
-            # return Image.open(BytesIO(data))
+            return Image.open(BytesIO(data))
+
         elif filter_type == "/JPXDecode":  # JPEG 2000
             return Image.open(BytesIO(data))
         elif filter_type == "/FlateDecode":  # PNG-like
@@ -88,32 +123,33 @@ def decode_image(obj) -> Image.Image | None:
             return Image.frombytes(mode, (width, height), data)
 
         elif filter_type == "/CCITTFaxDecode":  # Fax (1-bit TIFF)
-
             return Image.frombytes("1", (width, height), data)
 
         elif filter_type == "/LZWDecode":  # LZW (TIFF compression)
-
             decoded_data = lzw_decompress(data)
-
             return Image.open(BytesIO(decoded_data))
+
         elif filter_type == "/RunLengthDecode":  # Simple RLE Compression
             try:
                 decoded_data = run_length_decode(data)
                 return Image.open(BytesIO(decoded_data))
             except Exception as e:
                 logging.error(f"RunLengthDecode failed: {str(e)}")
+
         elif filter_type == "/ASCIIHexDecode":  # ASCII Hex Encoding
             try:
                 decoded_data = bytes.fromhex(data.decode("ascii").replace(">", ""))
                 return Image.open(BytesIO(decoded_data))
             except Exception as e:
                 logging.error(f"ASCIIHexDecode failed: {str(e)}")
+
         elif filter_type == "/ASCII85Decode":  # ASCII85 Encoding
             try:
                 decoded_data = base64.a85decode(data)
                 return Image.open(BytesIO(decoded_data))
             except Exception as e:
                 logging.error(f"ASCII85Decode failed: {str(e)}")
+
         elif filter_type == "/JBIG2Decode":  # JBIG2 Compression
             logging.warning("JBIG2 decoding requires an external decoder.")
             try:
@@ -122,17 +158,14 @@ def decode_image(obj) -> Image.Image | None:
             except Exception as e:
                 logging.error(f"JBIG2 decoding failed: {str(e)}")
                 return None
+
         elif filter_type == "/Crypt":
             logging.warning("Encrypted image detected. Cannot decode without decryption.")
             return None
-        elif filter_type == ['/FlateDecode']:
-            return None
-        elif filter_type == ['/DCTDecode']:
-            return None
+
         else:
             logging.warning(f"Unsupported image filter: {filter_type}")
+            return None
 
     except Exception as e:
         logging.error(f"Error decoding image: {str(e)}")
-
-    return None
