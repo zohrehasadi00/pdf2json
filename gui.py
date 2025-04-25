@@ -43,7 +43,6 @@ def papaias() -> List:
 
         if event == "start":
             pdf_path = values["file_path"]
-            save_to = values["save_folder"]
             if pdf_path and os.path.exists(pdf_path):
                 window.minimize()
                 return [Path(pdf_path)]
