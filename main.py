@@ -10,6 +10,7 @@ from api.api import extract_text_from_pdf
 from fastapi.responses import JSONResponse
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from pathlib import Path
 
 os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 save_to = None
@@ -60,7 +61,7 @@ async def main():
     else:
 
         pdf_path = gui[0]
-        save_to = gui[1]
+        save_to = Path(__file__).resolve().parent / "results"
 
         if pdf_path:
             file_name = pdf_path.name

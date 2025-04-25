@@ -27,6 +27,8 @@ pdf2json/
 │   ├── tesseract_ocr_model.py
 ├── statics/
 │   ├── List of PDFs
+├── results/
+│   ├── List of JSON files
 ├── tests/
 │   ├── __init__.py
 │   ├── test_accuracy_extracted_text.py

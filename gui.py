@@ -27,15 +27,12 @@ def papaias() -> List:
          sg.InputText(key="file_path", enable_events=True, visible=True, size=(57, 70), pad=((0, 0), (30, 30))),
          sg.FileBrowse("Browse", file_types=(("PDF Dateien", "*.pdf"),), key="browse", button_color="Black",
                        size=(10, 2))],
-        [sg.Text("Save Results To:", size=(13, 1), font=("Helvetica", 12, "bold")),
-         sg.InputText(key="save_folder", enable_events=True, size=(45, 1), pad=((0, 0), (10, 10))),
-         sg.FolderBrowse("Browse Folder", key="browse_folder", button_color="Black", size=(14, 2))],
         [sg.Button("Process", key="start", size=(20, 2), button_color="green", pad=((52, 50), (4, 0)),
                    font=("Helvetica", 12, "bold")),
          sg.Button("Cancel", key="exit", size=(20, 2), button_color="red", font=("Helvetica", 12, "bold"))]
     ]
 
-    window = sg.Window("PDF Auswahl", layout, size=(700, 500))
+    window = sg.Window("PDF Auswahl", layout, size=(700, 450))
 
     while True:
         event, values = window.read()
@@ -49,7 +46,7 @@ def papaias() -> List:
             save_to = values["save_folder"]
             if pdf_path and os.path.exists(pdf_path):
                 window.minimize()
-                return [Path(pdf_path), Path(save_to)]
+                return [Path(pdf_path)]
             else:
                 sg.popup("Bitte wählen Sie eine gültige PDF-Datei.", title="Fehler")
 
