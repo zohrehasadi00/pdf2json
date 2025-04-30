@@ -16,14 +16,10 @@ project_root = Path(__file__).resolve().parent.parent
 
 # Test file pairs (uncomment the pair you want to test)
 test_cases = [
-    # (project_root / "statics" / "Aßußfere Wendung.txt", project_root / "statics" / "Aßußfere Wendung.pdf"),
-    # (project_root / "statics" / "Geburtseinleitung.txt", project_root / "statics" / "Geburtseinleitung .pdf"),
-    # (project_root / "statics" / "Geburtshilf.txt", project_root / "statics" / "Geburtshilfe.pdf"),
-    (project_root / "statics" / "test.txt", project_root / "statics" / "test.pdf"),
-    # (project_root / "statics" / "Kaiserschnitt.txt", project_root / "statics" / "Kaiserschnitt.pdf"),
-    # (project_root / "statics" / "Narkose.txt", project_root / "statics" / "Narkose.pdf"),
-    # (project_root / "statics" / "Geburtshilfliche Maßnahmen.txt", project_root / "statics" / "Geburtshilfliche Maßnahmen.pdf"),
-    # (project_root / "statics" / "Geburtshilfliche_nahmen - edited.txt", project_root / "statics" / "Geburtshilfliche_nahmen.pdf")
+    (project_root / "statics" / "test_document_7.txt", project_root / "statics" / "test_document_7.pdf"),
+    # (project_root / "statics" / "test_document_9.txt", project_root / "statics" / "test_document_9.pdf"),
+    # (project_root / "statics" / "test_document_10.txt", project_root / "statics" / "test_document_10.pdf"),
+    # (project_root / "statics" / "test_document_11.txt", project_root / "statics" / "test_document_11.pdf")
 ]
 
 def convert_pdf_to_images(pdf_path: Path) -> list[tuple[int, Image.Image]]:
