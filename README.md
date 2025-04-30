@@ -21,6 +21,10 @@
 ### <span style="color:#3271a5">1. Prerequisites</span>  
 <span style="color:white">Ensure you have the following installed on your system:
 - **Python 3.8 or higher** (recommended: Python 3.10): [Python's official website](https://www.python.org/)
+- **Run following command in your IDE:**
+    ```bash
+  python -c "import nltk; nltk.download('punkt'); nltk.download('punkt_tab')"
+    ```
 - **Docker** (with Docker Compose, if applicable): [Docker's official website](https://www.docker.com/)
   - On Linux, you may need to install Docker Compose separately
 - **Git**: [Git's official website](https://git-scm.com/)
@@ -34,8 +38,7 @@
     brew install tesseract
     ```
   - On Windows:
-    - Download installer from [Tesseract GitHub](https://github.com/UB-Mannheim/tesseract/wiki)
-    - Or using Chocolatey: `choco install tesseract`
+    - Download installer from [Tesseract at UB Mannheim](https://github.com/UB-Mannheim/tesseract/wiki) or [Tesseract OCR](https://github.com/tesseract-ocr/tesseract/tree/main?tab=readme-ov-file#installing-tesseract)
 
 ### <span style="color:#3271a5">2. Clone the Repository</span>  
 <span style="color:white">Clone the project repository to your local machine:
