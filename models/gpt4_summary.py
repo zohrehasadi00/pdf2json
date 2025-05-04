@@ -33,5 +33,3 @@ def summarize_text(text):
 
     summary = response.choices[0].message.content.strip()
     return summary
-
-

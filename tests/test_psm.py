@@ -16,7 +16,8 @@ project_root = Path(__file__).resolve().parent.parent
 
 # Test file pairs (uncomment the pair you want to test)
 test_cases = [
-    (project_root / "statics" / "test_document_7.txt", project_root / "statics" / "test_document_7.pdf"),
+(project_root / "text_files" / "test_document_1.txt", project_root / "statics" / "test_document_1.pdf"),
+    #(project_root / "statics" / "test_document_7.txt", project_root / "statics" / "test_document_7.pdf"),
     # (project_root / "statics" / "test_document_9.txt", project_root / "statics" / "test_document_9.pdf"),
     # (project_root / "statics" / "test_document_10.txt", project_root / "statics" / "test_document_10.pdf"),
     # (project_root / "statics" / "test_document_11.txt", project_root / "statics" / "test_document_11.pdf")

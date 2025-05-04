@@ -1,4 +1,4 @@
-![License: LGPL-3.0](https://www.gnu.org/licenses/lgpl-3.0.txt)
+[License: LGPL-3.0](https://www.gnu.org/licenses/lgpl-3.0.txt)
 
 # <span style="color:#3271a5">pdf2json</span>  
 <span style="color:white">An Intelligent Docker-Based Pipeline for Document Processing with OCR and NLP for efficient data management</span>  

@@ -45,7 +45,7 @@ def process_single_page(args):
 
 
 def process_data(pdf_path):
-    logging.info("Starting PDF to image conversion...")
+    logging.info("Starting PDF to image conversion")
     image_pages = convert_pdf_to_images(pdf_path)
     logging.info(f"Converted {len(image_pages)} pages to images.")
 

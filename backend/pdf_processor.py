@@ -43,13 +43,13 @@ def process_pdf(file_path: Path) -> dict:
         raise FileNotFoundError(f"File not found: {file_path}")
 
     try:
-        logging.info("Checking PDF's kind ... ")
+        logging.info("Checking PDF's kind")
         if check(file_path):
             logging.info("PDF is scanned. Using OCR ... ")
             collected_data = process_data(file_path)
 
         else:
-            logging.info("It is a native PDF ... ")
+            logging.info("It is a native PDF")
 
             with ThreadPoolExecutor(max_workers=4) as executor:
                 future_text = executor.submit(extract_text_and_summarize, file_path)
@@ -58,7 +58,7 @@ def process_pdf(file_path: Path) -> dict:
                 text_data = future_text.result()
                 image_data = future_images.result()
 
-            logging.info("Combining the data ...")
+            logging.info("Combining the data")
             collected_data = combine_page_and_image_data(text_data, image_data)
 
         return {"status": "success", "title": file_path.name, "extracted data": collected_data}
