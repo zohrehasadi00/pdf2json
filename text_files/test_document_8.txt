@@ -1,0 +1,694 @@
+what you need to know about
+introduction
+anaesthetic experience in the undergraduate
+timetable is often very limited so it can
+remain somewhat of a mysterious practice
+well into specialist training. this introduction
+to the components of an anaesthetic
+will help readers to get more from clinical
+attachments in surgery and anaesthetics or
+serve as an introduction to the topic for
+novice or non-anaesthetists.
+types and sites of anaesthesia
+the term anaesthesia comes from the
+greek meaning loss of sensation.
+anaesthetic practice has evolved from a
+need for pain relief and altered consciousness
+to allow surgery. early anaesthetics
+used plant derivatives with later introduction
+of ether, inhaled gases and chloroform.
+modern anaesthesia has been developed
+and refined to enable surgery, interventions,
+pain relief and stabilization, and
+organ support.
+various forms of anaesthesia are conducted
+throughout the hospital and
+beyond. the operating theatres are the
+most common venue but anaesthetics are
+delivered on the labour ward, day surgery,
+intensive care, the emergency room,
+interventional radiology, computed
+tomography and magnetic resonance
+imaging, and on the wards during emergency
+care and transfer of acutely unwell
+patients. certain regional procedures
+may take place in pain clinics and outpatient
+settings.
+in general anaesthesia a reversible state
+of unconsciousness is achieved. it can be
+divided into three stages: induction, maintenance
+and emergence.
+in regional anaesthesia, nerve transmission
+is blocked, and the patient may stay
+awake or be sedated or anaesthetized during
+a procedure. techniques used include:
+n local anaesthetic field block
+n peripheral nerve block
+n nerve plexus block
+n central neuraxial block, e.g. spinal or
+epidural (figure 1 and table 1).
+components of a general
+anaesthetic
+a general anaesthetic always involves an
+hypnotic agent, usually an analgesic and
+may also include muscle relaxation. the
+combination is referred to as the ‘triad of
+anaesthesia’.
+the relative importance of each component
+depends on surgical and patient
+factors: the intervention planned, site,
+surgical access requirement and the
+degree of pain or stimulation anticipated.
+the technique is tailored to the individual
+situation.
+induction
+the induction of anaesthesia refers to the
+transition from an awake to an anaesthetized
+state. this end point can be ill defined
+and the process of induction is a time of
+physiological disruption with multi-system
+effects.
+standard induction
+intravenous
+the standard induction is with the intravenous
+agent propofol. a calculated by
+weight dose is delivered and the effects
+reviewed before further titration of the
+drug. delays in inducing anaesthesia may
+represent slow arm–brain circulation time
+(e.g. elderly, cardiovascular disease),
+an introduction to anaesthesia
+dr ciara donohue is specialist registrar
+in anaesthesia in the centre for anaesthesia,
+university college london hospitals,
+london nw1 2bu, mr ben hobson
+is medical student at university college
+london, london, and dr robert cm
+stephens is consultant anaesthetist,
+university college london hospitals and
+honorary senior lecturer in the centre for
+anaesthesia, university college london,
+london
+correspondence to: dr c donohue
+(ciaradonohue@doctors.org.uk)
+subarachnoid (spinal) epidural
+injection through dura into csf catheterization of potential space outside dura
+low volume (up to 3 ml) high volume (>10 ml)
+high concentration local anaesthetic 0.5% bupivicaine variable concentration local anaesthetic, analgesia
+0.1% bupivicaine, anaesthesia up to 2% lignocaine
+rapid onset dense sensorimotor block gradual titration of block density, may be motor
+sparing
+profound vasodilation causing haemodynamic instability gradual titration causing less haemodynamic
+disturbance
+table 1. characteristics of different central neuraxial blocks
+figure 1. schematic vertical longitudinal section
+of vertebral column and structures encountered
+when performing central neuraxial blocks. *
+negative pressure space filled with fat and
+venous plexi. † extends to s2, containing
+arachnoid mater, csf, pia mater, spinal cord
+above l1/2 and spinal nerves.
+vertebral
+body
+intervertebral
+disc
+posterior
+longitudinal
+ligament
+anterior
+longitudinal
+ligament
+epidural space*
+dural
+sac†
+dura mater
+spinous
+process
+supraspinous
+ligament
+ligamentum
+flavum
+(tough)
+interspinous
+ligament
+ctd_c71_c75_anaesthesia.indd 71 26/04/2013 16:24
+c72 british journal of hospital medicine, may 2013, vol 74, no 5
+patient anxiety, recreational drug use or
+extravasation. an opioid is often given to
+reduce the dose of induction agent needed
+and smooth the induction process. a muscle
+relaxant is usually given if intubation is
+required.
+inhalational induction
+an alternative method of inducing anaesthesia
+is with a volatile agent, e.g. sevoflurane.
+the concentration of volatile delivered
+is gradually increased with the patient
+spontaneously breathing. common uses
+include paediatric practice, cases of difficult
+airway, difficult venous access or
+inhaled foreign body where maintaining
+spontaneous ventilation is preferable.
+intubation of the trachea can be achieved
+under deep inhalational induction without
+muscle relaxation.
+rapid sequence induction:
+when and why?
+a specifically adapted induction process is
+used when rapid intubation of the trachea
+is required to minimize risk of regurgitation
+and aspiration (table 2). such instances
+include intestinal obstruction or intraabdominal
+pathology, an un-fasted patient
+in an emergency or trauma situation,
+obstetric emergency or a strong history of
+reflux. pre-oxygenation plus rapid induction
+and paralysis obviate the need for bag
+mask ventilation before securing the airway,
+so the risk of gastric insufflation and
+regurgitation is reduced (sinclair and
+luxton, 2005).
+muscle relaxation
+if intubation is required, it may be necessary
+to paralyse the patient using:
+n depolarizing muscle relaxants (e.g. suxamethonium)
+n non-depolarizing muscle relaxants
+(benzylisoquinoloniums, e.g. atracurium,
+or aminosteroids, e.g. rocuronium).
+normally, an action potential reaching the
+nerve terminal of the neuromuscular junction
+causes calcium influx and acetylcholine
+to be released pre-synaptically.
+acetylcholine crosses the cleft and binds to
+postsynaptic nicotinic acetylcholine receptors
+causing opening of these ion channels
+and depolarization of the motor end plate.
+if a sufficient end plate potential is
+achieved, an action potential is generated
+leading to muscle contraction (king and
+hunter, 2002).
+a depolarizing agent such as suxamethonium
+(biochemically two acetylcholine
+molecules) binds to the postsynaptic acetylcholine
+receptors, resulting in transient
+receptor agonism and muscle contraction
+followed by a refractory period of muscle
+relaxation within 30–60 seconds lasting
+several minutes. its relatively short-lived
+effects are the result of its metabolism by
+plasma cholinesterase.
+non-depolarizing agents are competitive
+antagonists of acetylcholine at the postsynaptic
+nicotinic receptor and are used for
+more prolonged paralysis. blocking the ion
+channel, their main action is to prevent end
+plate depolarization and propagation of the
+impulse. atracurium undergoes spontaneous
+degradation in the plasma known as
+‘hoffman’ degradation, while some is
+hydrolysed by esters so it is a useful agent in
+patients with hepatic and renal impairment
+as offset is not reliant on organ function. as
+the percentage acetylcholine receptor occupancy
+falls, competitive antagonism is lost
+and acetylcholine can once again bind to
+receptors to generate an end plate potential
+and reach the threshold for transmission.
+neuromuscular function is restored
+(appiah-ankam and hunter, 2004).
+neuromuscular junction function
+should be monitored using a peripheral
+nerve stimulator and observing response to
+stimulations over a peripheral nerve (e.g.
+ulnar). the stimulation is supramaximal in
+order to stimulate all the nerve fibres and
+produce a consistent muscular response.
+the number and strength of resultant
+muscle twitches gives information about
+the recovery of the neuromuscular junction
+(davis and kenny, 2003). in order to
+enhance neuromuscular recovery post nondepolarizing
+relaxation at the end of surgery,
+the amount of acetylcholine in the
+synapse is increased by inhibiting the acetylcholinesterase
+enzyme using a reversal
+agent such as neostigmine.
+airway maintenance
+under anaesthesia the soft tissues of the
+airway relax and patency may be lost.
+protective airway reflexes are also suppressed.
+manual manoeuvres and simple
+adjuncts such as a chin tilt, jaw thrust and
+guedel airway are used as soon as the
+patient begins to lose airway tone to prevent
+obstruction. conventionally the
+options for maintaining the airway of an
+anaesthetized patient are a supraglottic
+device (e.g. laryngeal mask airway) or
+endotracheal intubation (figure 2). at the
+preparation trained staff
+emergency drugs and equipment
+tipping trolley
+suction on under pillow
+aspiration of nasogastric tube
+pre-oxygenation fraction of inspired oxygen 100%
+3 minutes regular breathing or
+five vital capacity breaths
+cricoid pressure pressure over cricoid cartilage
+compression of underlying
+oesophagus
+prevents regurgitation of gastric
+contents soiling oropharynx or
+airway
+release pressure if vomiting
+drugs no co-induction opioid
+thiopentone 3–5 mg/kg
+suxamethonium 1–2 mg/kg
+intubation once tracheal ventilation
+intubation commenced
+confirmed: cricoid pressure
+released
+device supraglottic endotracheal
+features sits above vocal cords passes through vocal cords
+maintains airway inflated cuff
+no airway protection against aspiration airway protected
+figure 2. supraglottic and endotracheal airways.
+table 2. rapid sequence induction
+ctd_c71_c75_anaesthesia.indd 72 26/04/2013 16:24
+british journal of hospital medicine, may 2013, vol 74, no 5 c73
+what you need to know about
+preoperative visit, history, examination and
+review of investigations and previous
+anaesthetic charts contribute to the assessment
+of the airway and perioperative planning
+(cranshaw and cook, 2011).
+maintenance
+maintenance of anaesthesia refers to keeping
+a patient unconscious and can be
+achieved using inhaled volatile agents or
+continuous infusion of intravenous agents.
+volatile agents are most commonly used,
+delivered via vaporisers found on the ‘back
+bar’ of the anaesthetic machine which feed
+into the breathing circuit. the concentrations
+of the inhaled agents are measured
+and displayed. expired end tidal concentration
+is equivalent to the alveolar concentration
+which in turn represents the concentration
+at the site of action (cns). this
+gives the anaesthetist an idea of the amount
+of anaesthetic agent reaching the patient
+and the likely depth of anaesthesia. the
+minimal alveolar concentration is the alveolar
+concentration of a volatile agent which
+when given alone prevents movement in
+50% of healthy volunteers to a standard
+surgical stimulus (e.g. skin incision). the
+minimal alveolar concentration varies
+between different volatile agents inversely
+related to their potency (as their structures
+vary) and is also affected by other pharmacological
+and physiological variables (yentis
+et al, 2009).
+intravenous maintenance of anaesthesia
+can be achieved with infusions of propofol
+with or without an opioid delivered via a
+pump. several pharmacokinetic models
+have been developed which map the theoretical
+body compartments among which a
+drug distributes. the desired plasma or
+effector site concentration can be dialled
+up alongside basic patient demographics
+(age, sex, weight) and the pump adjusts the
+rate of infusion to achieve the specified
+drug concentration. this is known as a
+target controlled infusion. effective secure
+intravenous access is crucial.
+the choice of maintenance technique
+may be determined by surgical and patient
+factors and the experience of the anaesthetist.
+total intravenous anaesthesia is
+often used in day surgery, neurosurgery or
+if patients get severe postoperative nausea
+and vomiting as it avoids emetogenic
+volatiles and enables rapid recovery with
+minimal hangover effect (yuill and
+simpson, 2002).
+systemic effects of general
+anaesthesia
+general anaesthesia leads to multi-system
+physiological changes (tables 3 and 4). the
+systemic effects of anaesthesia vary with the
+drugs used so different agents are favoured
+in different clinical contexts. in general,
+intravenous (propofol and thiopentone)
+and volatile agents all reduce blood pressure
+as a result of vasodilation, and negative
+inotropy and chronotropy. starting positive
+pressure ventilation (i.e. ventilating
+someone) can impede venous return to the
+heart, reducing preload and cardiac output.
+the sympathetic stimulation from surgery
+opposes these changes.
+intravenous (propofol, thiopentone and
+etomidate) and volatile agents are all respiratory
+depressants and depress airway
+reflexes to differing degrees. propofol is
+particularly effective at inducing transient
+apnoea and depressing airway reflexes
+facilitating placement of supraglottic
+devices post induction. of the volatile
+agents, sevoflurane is the least irritant to
+airways making it particularly suitable for
+stage of general
+anaesthesia airway breathing circulation drugs
+induction plan for securing, maintaining high flow oxygen at vasodilation leads to reduced systemic intravenous: analgesia (opioid co-induction, e.g.
+and protecting airway as soft induction, consider vascular resistance and mean arterial fentanyl) then hypnotic agent (e.g. propofol,
+tissue tone and reflexes are lost pre-oxygenation pressure, intubation can cause thiopentone) with or without muscle relaxation
+sympathetic hypertensive response or volatile gas induction (sevoflurane)
+maintenance maintain airway position and maintain saturations, maintain adequate cardiac output volatile (e.g. sevoflurane, isoflurane, desflurane)
+patency ventilatory strategies, and tissue perfusion, fluid balance intravenous (total intravenous anaesthesia, e.g.
+lung protection propofol +/- remifentanil), analgesia, antiemesis
+emergence suction secretions, as airway increase fraction of time of haemodynamic instability reversal of neuromuscular block
+tone and reflexes return plan inspired oxygen, ensure
+for safe removal of supraglottic adequate spontaneous
+device or extubation tidal volumes
+system common anaesthetic agents ketamine
+cardiovascular hypotension: mean arterial pressure = (heart rate normotension or hypertension
+x stroke volume) x systemic vascular resistance
+vasodilation (↓systemic vascular resistance) tachycardia
+negative chronotropy (↓heart rate)
+negative inotropy (↓stroke volume)
+respiratory loss of airway reflexes and tone airway reflexes and tone maintained
+bronchodilation
+gastrointestinali propofol = antiemetic salivation
+volatiles = emetogenic emetogenic
+cns hypnosis dissociative anaesthesia, analgesia,
+hallucinations
+from sasada and smith (2008)
+table 4. stages of a general anaesthetic: an a, b, c, d approach
+table 3. systemic effects of general anaesthesia
+ctd_c71_c75_anaesthesia.indd 73 26/04/2013 16:24
+c74 british journal of hospital medicine, may 2013, vol 74, no 5
+gaseous induction and paediatrics.
+desflurane is irritant and is therefore often
+used once anaesthesia and airway have
+been established. both sevoflurane and
+isoflurane are bronchodilators and may
+even have a role in the management of
+brittle asthma.
+ketamine is an exceptional intravenous
+agent in that it maintains cardiovascular
+stability and preserves muscular tone, airway
+patency and bronchodilates in addition
+to its analgesic properties. it is termed
+a ‘dissociative anaesthetic’, meaning the
+patient may be unaware and detached from
+his/her surroundings but not completely
+unconscious. its attributes make it useful
+in haemodynamically unstable patients,
+the developing world and field anaesthesia
+(peck et al, 2008).
+emergence and recovery
+once anaesthesia is no longer required,
+maintenance agents can be switched off.
+before emergence, adequate analgesia and
+anti-emesis should be ensured and neuromuscular
+junction function restored if a
+muscle relaxant has been used.
+like induction, emergence can be a
+time of physiological disturbance. as
+patients start to wake from anaesthesia or
+‘lighten’ they may develop agitation,
+laryngospasm and breath-holding.
+conventionally extubation is performed
+following oropharyngeal suction, once the
+patient is generating good tidal volumes
+and is awake, ensuring airway reflexes
+have returned and the patient will protect
+his/her own airway. in certain circumstances
+extubation may be performed
+‘deep’, i.e. with the patient still under
+anaesthesia. under anaesthesia, airway
+reflexes will remain suppressed, reducing
+the risk of coughing, laryngospasm and
+hypertension associated with extubation.
+this may be preferable in certain neurosurgical
+and cardiac patients in whom
+surges in intracranial or systemic blood
+pressure should be avoided. however, the
+airway will be unprotected against aspiration
+until the patient is awake.
+the recovery room is an intermediate
+place of safety between theatre and the
+ward where immediate surgical or anaesthetic
+complications can be detected and
+managed. vital signs, pain scores and other
+potential problems such as postoperative
+nausea and vomiting are monitored.
+perioperative care
+warming
+as homeothermic mammals, our core
+temperature is designed to be around
+36.5°c. patients are susceptible to hypothermia
+under anaesthesia as a result of
+vasodilation causing redistribution of heat
+from core to periphery, convection, radiation
+(exposed areas), conduction (contact
+with cold metal objects), evaporation
+(endotracheal tube bypasses nasopharyngeal
+humidification, exposed moist mucosal
+surfaces) and loss of compensatory heatpreserving
+or heat-generating mechanisms,
+e.g. shivering.
+hypothermia can cause coagulopathy,
+perioperative cardiac events, increased risk
+of postoperative infection and can prolong
+recovery and hospital stay. exposure
+should be minimized and temperature
+monitored pre-, intra- and postoperatively.
+warm air devices and warmed fluids
+can be used to offset heat loss and maintain
+optimal body temperature (harper et
+al, 2008).
+fluid balance
+the anaesthetist needs to be an expert in
+fluid resuscitation, using crystalloids, colloids
+and blood products where appropriate.
+the aim is to ensure good tissue
+perfusion and hence oxygenation. rather
+than give a fixed fluid dose, monitors
+(e.g. oesophageal doppler) are often used
+and fluid challenges given to achieve a set
+endpoint, aiming to avoid hyper- or
+hypovolaemia (doherty and buggy,
+2012).
+positioning
+patients are vulnerable to nerve and pressure
+point injury under anaesthesia and
+protection of these areas is the responsibility
+of the anaesthetist. patients should ideally
+be in a neutral position with padding
+used to support at-risk areas (knight and
+mahajan, 2004).
+awareness
+awareness is the unplanned recall of events
+under anaesthesia and is often one of the
+complications patients fear most. it can be
+implicit or explicit, from a vague sense of
+having been awake through to specific
+memories of events and conversations
+respectively. awareness is distressing and
+can lead to post-traumatic syndromes.
+monitoring for awareness can include
+clinical observation (such as papillary dilatation,
+lacrimation, sweating) and measurement
+(heart rate, blood pressure, end
+tidal volatile concentration and depth of
+anaesthesia monitors). most depth of
+anaesthesia monitors interpret patterns of
+neuronal electrical activity to deduce the
+level of conscious state (al-shaikh and
+stacey, 2007).
+other drugs
+aside from the traditional triad of anaesthesia
+drugs, the cardiovascular system is
+often manipulated to offset the effects of
+anaesthesia or surgical stimulation. heart
+rate may be increased by an anti-muscarinic
+(e.g. atropine or glycopyrrolate)
+or a mixed beta-adrenoceptor agonist
+(e.g. ephedrine) or reduced by betablockers.
+blood pressure can be increased
+by vasoconstricting with an alpha 1
+adrenoceptor agonist such as metaraminol
+or reduced with an alpha antagonist
+(e.g. phentolamine).
+analgesia
+pain relief is very important for patients
+and features in the triad of anaesthesia.
+despite a patient being unconscious and
+unaware intraoperatively, stimulation (e.g.
+surgery) will still elicit a sympathetic
+response which analgesia can desirably
+attenuate. appropriate analgesia is also
+essential for smooth emergence and comfort
+immediately after surgery. analgesia is
+typically multi-modal with opioids titrated
+to extent of stimulation and predicted
+postoperative pain.
+safety
+patient safety is crucially important. the
+world health organization surgical safety
+checklist is a tool to attempt to make
+the perioperative journey safer and
+enhance team communication. the entire
+team must ensure the correct patient is
+consented for the correct procedure and
+that any allergies or potential complications
+are acknowledged and shared among
+the team.
+the world health organization surgical
+safety checklist has three components
+which are completed on arrival to the
+anaesthetic room, before the start of surgery
+or intervention and at the end of the
+procedure (walker et al, 2012).
+ctd_c71_c75_anaesthesia.indd 74 26/04/2013 16:24
+british journal of hospital medicine, may 2013, vol 74, no 5 c75
+what you need to know about
+conclusions
+anaesthesia is an enormous subject and
+this article is merely a tip of the iceberg
+introduction to some types of regional and
+general anaesthesia.
+anaesthetists, while developing specialized
+airway skills and a deep understanding
+of physiology and pharmacology, need an
+holistic approach and broad knowledge
+base because of the varied nature of their
+role. anaesthetists will come into contact
+with approximately two thirds of hospital
+patients in a diverse range of clinical contexts
+and environments. hopefully this
+article has whetted your appetite to know
+more or given you a fresh insight into a
+specialty which is taking place in all corners
+of your hospital. bjhm
+conflict of interest: none.
+al-shaikh b, stacey s (2007) non invasive
+monitoring. in: al-shaikh b, stacey s, eds.
+essentials of anaesthetic equipment. 3rd edn.
+churchill livingstone, london: 151–3
+appiah-ankam j, hunter j (2004) pharmacology of
+neuromuscular blocking drugs. contin educ
+anaesth crit care pain 4(1): 2–7
+cranshaw j, cook t (2011) airway assessment and
+management. in: allman k, wilson i, eds. oxford
+handbook of anaesthesia. 3rd edn. oxford
+university press, oxford: 970–6
+davis p, kenny g (2007) biological electrical
+potentials: their display and recording. in: davis
+p, kenny g, eds. basic physics and measurement in
+anaesthesia. 5th edn. butterworth-heinemann,
+london: 171
+doherty m, buggy d (2012) intraoperative fluids:
+how much is too much? br j anaesth 109(1):
+69–79
+harper cm, andrzejowski jc, alexander r (2008)
+nice and warm. br j anaesth 101(3): 293–5
+king jm, hunter j (2002) physiology of the
+neuromuscular junction. br j anaesth cepd
+reviews 2(5): 129–33
+knight djw, mahajan rp (2004) patient
+positioning in anaesthesia. contin educ anaesth
+crit care pain 4(5): 160–3
+peck te, hill s, williams m (2008) core drugs in
+anaesthetic practice. in: peck te, hill s, williams
+m, eds. pharmacology for anaesthesia and intensive
+care. 3rd edn. cambridge university press,
+cambridge: 99–102
+sasada m, smith s (2008) drugs in anaesthesia and
+intensive care. 3rd edn. oxford university press,
+oxford
+sinclair rcf, luxton mc (2005) rapid sequence
+induction. contin educ anaesth crit care pain
+5(2): 45–8
+walker a, reshamwalla s, wilson i (2012) surgical
+safety checklists: do they improve outcomes? br j
+anaesth 109(1): 47–54
+yentis s, hirsch n, smith g (2009) anaesthesia and
+intensive care a-z. 4th edn. churchill
+livingstone, london: 354
+yuill g, simpson m (2002) an introduction to total
+intravenous anaesthesia. br j anaesth cepd
+reviews 2(1): 24–6
+key points
+n anaesthesia means loss of sensation and can be divided into regional anaesthesia (blockade of nerve
+transmission) or general anaesthesia (a reversible state of unconsciousness).
+n general anaesthesia often comprises a triad of hypnosis, analgesia and muscle relaxation.
+n general anaesthesia can be divided into three stages: induction, maintenance and emergence.
+n under general anaesthesia airway tone and reflexes are lost and the airway must be maintained
+with manual manoeuvres, adjuncts (guedel, laryngeal mask airways) or definitive devices which also
+protect the airway from regurgitation and aspiration (e.g. endotracheal tubes).
+n general anaesthesia leads to multi-system physiological changes particularly at induction and
+emergence.
+n other aspects of perioperative care central to anaesthetic practice include thermal homeostasis, fluid
+balance, positioning, avoidance of awareness, analgesia and patient safety.
+order your copies by visiting
+www.quaybooks.co.uk
+or call our hotline
++44(0)1722 716 935
+psychosis
+stories of recovery and hope
+editors: hannah cordle, jane fradgley, jerome carson, frank holloway and paul richards
+  
+9 78 1856 42 4202
+isbn 1-85642-420-0
+www.quaybooks.co.uk
+psychosis
+stories of recovery and hope
+editors: hannah cordle, jane fradgley, jerome carson, frank holloway and paul richards
+cover front jane_layout 1 06/08/2010 15:12 page 1
+psychosis stories of recovery and hope
+about the book
+this book presents real people recounting their stories as psychosis
+patients, taking you on a journey through the hard times, the discovery
+of hope and the road to recovery.
+each story will inspire you and provide a greater insight into working
+and caring for people who experience psychosis. the book will provide
+a greater understanding of psychosis for sufferers, their carers and
+all healthcare professionals by sharing the personal experiences of
+individuals living positively with psychosis.
+the book presents real-life role models for people with mental illness;
+demonstrating that recovery is a real possibility; and promoting hope as
+an important factor in recovery. each contributor has something original
+and practical to say on recovery, be it the importance of spirituality,
+finding ways to contribute to society and bring meaning and order to
+their life. each story can offer us new directions in the recovery debate.
+it includes important contributions from leading specialists on the
+clinical aspects of care and examines the value of narratives in the
+recovery process. it surveys the recovery landscape and provides
+examples in practice at both an individual and group level making it a
+highly practical book for any mental health practitioner.
+editors: hannah cordle, jane fradgley,
+jermone carson, frank holloway and paul richards
+psychosis_press.indd 1 09/12/2010 09:33
+each story will inspire you and provide a greater understanding into
+working with people who experience psychosis.
+ aims to provide a greater understanding of psychosis for sufferers, carers and all healthcare
+professionals
+ comprises narratives of individuals living positively with psychosis and presents their
+experience with different healthcare professionals
+ includes chapters on the clinical aspects of care and recovery by leading specialists in the  eld
+ funded by guy’s and st thomas’ charity
+isbn-13: 978-1-85642-420-2; isbn-10: 1-85642-420-0; 234 x 156 mm; publication 2011 £19.99;
+220 pages
+“this book is a powerful testament to the importance of story...unsentimental, lightly
+edited and intelligently framed by short essays from mental health professionals, this book
+is a welcome draft of realistic optimism for all those involved in the world of mental health
+provision... this book is a tonic for the users and providers of mental health services.”
+british journal of wellbeing
+real people recounting their stories through
+the hard times and the road to recovery
+ctd_c71_c75_anaesthesia.indd 75 26/04/2013 16:24
