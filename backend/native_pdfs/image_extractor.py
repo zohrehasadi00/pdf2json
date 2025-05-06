@@ -51,7 +51,7 @@ def extract_images(file_path: Path) -> List[Dict]:
             reader = PyPDF2.PdfReader(f)
 
             for page_number, page in enumerate(reader.pages, 1):
-                logging.info(f"Extracting information from image(s) on page {page_number}")
+                logging.info(f"Page {page_number}: Encoding the image(s) and extracting the text(s)")
 
                 resources = page.get("/Resources")
                 if isinstance(resources, IndirectObject):
@@ -97,7 +97,7 @@ def extract_images(file_path: Path) -> List[Dict]:
     except Exception as e:
         logging.error(f"Error extracting images from PDF {file_path}: {str(e)}")
 
-    logging.info("Cleaning the texts starts ...")
+    logging.info("Cleaning the extracted text(s) from image(s)")
 
     with ProcessPoolExecutor() as executor:
         cleaned_pages = list(executor.map(clean_page_texts, pages))

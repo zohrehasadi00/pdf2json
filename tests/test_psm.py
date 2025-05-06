@@ -84,7 +84,7 @@ def test_ocr_accuracy(test_case):
     image_pages = convert_pdf_to_images(pdf_path)
     ocr_results = []
 
-    with ThreadPoolExecutor(max_workers=4) as executor:
+    with ThreadPoolExecutor(max_workers=10) as executor:
         futures = [executor.submit(process_single_page, (page_num, img))
                    for page_num, img in image_pages]
 
@@ -122,7 +122,7 @@ if __name__ == "__main__":
     image_pages = convert_pdf_to_images(pdf_path)
     ocr_results = []
 
-    with ThreadPoolExecutor(max_workers=4) as executor:
+    with ThreadPoolExecutor(max_workers=10) as executor:
         futures = [executor.submit(process_single_page, (page_num, img))
                    for page_num, img in image_pages]
 

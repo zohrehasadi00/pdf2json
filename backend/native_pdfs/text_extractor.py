@@ -9,6 +9,8 @@ from models.nlp_paragraph_detection import segment_paragraphs_textrank
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("openai").setLevel(logging.WARNING)
 
 def process_page(page_num: int, page_text: str) -> Dict:
     try:
@@ -19,14 +21,21 @@ def process_page(page_num: int, page_text: str) -> Dict:
             .replace(":", " ").replace("/", " ").lower().replace("\n", " ") \
             .replace("  ", " ").strip()
 
+        logging.info(f"Text in page {page_num} has been")
+        logging.info(f"_______________ extracted")
+        logging.info(f"_______________ cleaned")
+
         language = detect(text)
         paragraphs = segment_paragraphs_textrank(text, language)
+        logging.info(f"_______________ divided into paragraphs")
         summarized_paragraphs = []
 
-        with ThreadPoolExecutor(max_workers=4) as executor:
+        with ThreadPoolExecutor(max_workers=10) as executor:
             future_to_paragraph = {
                 executor.submit(summarize_paragraph, paragraph): paragraph for paragraph in paragraphs
             }
+
+            logging.info("_______________ And summarized")
 
             for future in as_completed(future_to_paragraph):
                 try:
@@ -62,7 +71,7 @@ def extract_text_and_summarize(file_path) -> List[Dict]:
     with pdfplumber.open(file_path) as pdf:
         pages = [(page.page_number, page.extract_text()) for page in pdf.pages]
 
-    with ProcessPoolExecutor(max_workers=4) as executor:
+    with ProcessPoolExecutor(max_workers=10) as executor:
         futures = [executor.submit(process_page, num, text) for num, text in pages]
 
         for future in as_completed(futures):

@@ -45,15 +45,23 @@ def process_pdf(file_path: Path) -> dict:
     try:
         logging.info("Checking PDF's kind")
         if check(file_path):
-            logging.info("PDF is scanned. Using OCR ... ")
+            logging.info("PDF is scanned")
+            logging.info("Using OCR")
             collected_data = process_data(file_path)
 
         else:
-            logging.info("It is a native PDF")
+            logging.info("PDF is native")
 
-            with ThreadPoolExecutor(max_workers=4) as executor:
+            with ThreadPoolExecutor(max_workers=10) as executor:
                 future_text = executor.submit(extract_text_and_summarize, file_path)
+
+                if not future_text:
+                    logging.info("There is no text in this file")
+
                 future_images = executor.submit(extract_images, file_path)
+
+                if not future_images:
+                    logging.info("There is no images in this file")
 
                 text_data = future_text.result()
                 image_data = future_images.result()

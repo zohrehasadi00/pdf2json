@@ -8,6 +8,8 @@ from backend.imgRelated.base64 import image_to_base64
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from backend.imgRelated.text_from_img import extract_text_from_image
 
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("openai").setLevel(logging.WARNING)
 
 def convert_pdf_to_images(pdf_path):
     pdf_document = fitz.open(pdf_path)
@@ -36,7 +38,7 @@ def process_single_page(args):
         base64_image = image_to_base64(image)
         extracted_text = extract_text_from_image(image)
         extracted_text = cleaning(extracted_text)
-
+        logging.info(f"Page {page_number}: Image has been encoded and its text extracted.")
         return (page_number, base64_image, extracted_text)
 
     except Exception as e:
@@ -45,12 +47,12 @@ def process_single_page(args):
 
 
 def process_data(pdf_path):
-    logging.info("Starting PDF to image conversion")
+    logging.info("Converting the PDF pages -> images")
     image_pages = convert_pdf_to_images(pdf_path)
-    logging.info(f"Converted {len(image_pages)} pages to images.")
+    logging.info(f"{len(image_pages)} images has been created")
 
     image_data = []
-    with ThreadPoolExecutor(max_workers=4) as executor:
+    with ThreadPoolExecutor(max_workers=10) as executor:
         futures = [executor.submit(process_single_page, (page_num, image))
                    for page_num, image in image_pages]
 
@@ -59,8 +61,6 @@ def process_data(pdf_path):
             if result is not None:
                 image_data.append(result)
 
-
-    logging.info("Starting summarization of extracted text...")
     page_images = {}
 
     with ThreadPoolExecutor() as executor:
@@ -68,8 +68,6 @@ def process_data(pdf_path):
             executor.submit(summarize, text): (page_num, base64_img, text)
             for page_num, base64_img, text in image_data
         }
-
-        logging.info(f"Submitted {len(summary_futures)} tasks to the executor.")
 
         for future in as_completed(summary_futures):
             page_num, base64_img, text = summary_futures[future]
@@ -85,12 +83,8 @@ def process_data(pdf_path):
                     "summary": summary
                 }
 
-                logging.debug(f"Page {page_num} added to page_images.")
-
             except Exception as e:
                 logging.error(f"Error summarizing page {page_num}: {str(e)}")
-
-    logging.info("Completed all tasks.")
 
     final_results = {
         f"Page{i}": page_images[f"Page{i}"]
@@ -98,5 +92,5 @@ def process_data(pdf_path):
         if f"Page{i}" in page_images
     }
 
-    logging.info("Completed all tasks.")
+    logging.info("Completed all tasks")
     return final_results
