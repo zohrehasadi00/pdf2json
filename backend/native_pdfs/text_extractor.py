@@ -1,4 +1,15 @@
 import logging
+
+
+# Suppress pdfminer CropBox warnings
+class SuppressCropBoxWarning(logging.Filter):
+    def filter(self, record):
+        return "CropBox missing from /Page" not in record.getMessage()
+
+
+logging.getLogger("pdfminer").addFilter(SuppressCropBoxWarning())
+logging.getLogger("pdfminer").setLevel(logging.ERROR)
+
 import pdfplumber
 from typing import Dict, List
 from langdetect import detect
@@ -11,6 +22,7 @@ logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %
 
 logging.getLogger("httpx").setLevel(logging.WARNING)
 logging.getLogger("openai").setLevel(logging.WARNING)
+
 
 def process_page(page_num: int, page_text: str) -> Dict:
     try:

@@ -77,5 +77,18 @@ async def main():
 
 if __name__ == "__main__":
     import asyncio
+    import warnings
+    import logging
+
+    # Suppress all Python warnings
+    warnings.filterwarnings("ignore")
+
+    # Suppress all logging from pdfminer
+    logging.getLogger("pdfminer").setLevel(logging.ERROR)
+
+    # Optionally suppress other libraries too
+    logging.getLogger("PyPDF2").setLevel(logging.ERROR)
+    logging.getLogger("httpx").setLevel(logging.WARNING)
+    logging.getLogger("openai").setLevel(logging.WARNING)
 
     asyncio.run(main())

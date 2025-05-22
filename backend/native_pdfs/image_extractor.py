@@ -10,6 +10,7 @@ from models.gpt4_cleaning_text import cleaning
 from concurrent.futures import ProcessPoolExecutor
 import json
 
+logging.getLogger("PyPDF2").setLevel(logging.ERROR)
 
 def should_clean(text: str) -> bool:
     """Decide if text should be cleaned."""
@@ -76,7 +77,7 @@ def extract_images(file_path: Path) -> List[Dict]:
                         image = decode_image(obj)
 
                         if image is None:
-                            logging.warning(f"Skipping a failed image on page {page_number}.")
+                            # logging.warning(f"Skipping a failed image on page {page_number}.")
                             continue
 
                         base64_image = image_to_base64(image)
@@ -103,4 +104,3 @@ def extract_images(file_path: Path) -> List[Dict]:
         cleaned_pages = list(executor.map(clean_page_texts, pages))
 
     return cleaned_pages
-

@@ -1,7 +1,17 @@
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lex_rank import LexRankSummarizer
+import nltk
+import logging
 
+# Ensure punkt tokenizer is available
+nltk_logger = logging.getLogger("nltk")
+nltk_logger.setLevel(logging.ERROR)
+
+try:
+    nltk.data.find("tokenizers/punkt")
+except LookupError:
+    nltk.download("punkt", quiet=True)
 
 def segment_paragraphs_textrank(text, language):
     """

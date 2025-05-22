@@ -9,6 +9,22 @@ from pdfminer.pdfinterp import PDFResourceManager
 from pdfminer.pdfinterp import PDFPageInterpreter
 from pdfminer.pdfpage import PDFTextExtractionNotAllowed
 
+import logging
+
+
+# Filter out specific warning about missing CropBox
+class CropBoxWarningFilter(logging.Filter):
+    def filter(self, record):
+        return "CropBox missing from /Page" not in record.getMessage()
+
+
+# Attach filter to the pdfminer logger
+pdfminer_logger = logging.getLogger("pdfminer")
+pdfminer_logger.addFilter(CropBoxWarningFilter())
+
+# Optional: Set log level lower to avoid other warnings
+pdfminer_logger.setLevel(logging.ERROR)
+
 
 def check(pdf_path):
     try:

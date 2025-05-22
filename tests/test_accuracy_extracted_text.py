@@ -9,41 +9,16 @@ import pytest
 
 project_root = Path(__file__).resolve().parent.parent
 
-# Examples; you can copy any of pairs for testing:
 
-# text_path = project_root / "statics" / "Aßußfere Wendung.txt"
-# pdf = project_root / "statics" / "Aßußfere Wendung.pdf"
-
-# text_path = project_root / "statics" / "Geburtseinleitung.txt"
-# pdf = project_root / "statics" / "Geburtseinleitung .pdf"
-
-# text_path = project_root / "statics" / "Geburtshilf.txt"
-# pdf = project_root / "statics" / "Geburtshilfe.pdf"
-
-# text_path = project_root / "statics" / "test.txt"
-# pdf = project_root / "statics" / "test.pdf"
-
-# text_path = project_root / "statics" / "Kaiserschnitt.txt"
-# pdf = project_root / "statics" / "Kaiserschnitt.pdf"
-
-# text_path = project_root / "statics" / "Narkose.txt"
-# pdf = project_root / "statics" / "Narkose.pdf"
-
-# text_path = project_root / "statics" / "Geburtshilfliche Maßnahmen.txt"
-# pdf = project_root / "statics" / "Geburtshilfliche Maßnahmen.pdf"
-
-# text_path = project_root / "statics" / "Geburtshilfliche_nahmen - edited.txt"
-# pdf = project_root / "statics" / "Geburtshilfliche_nahmen.pdf"
-
-# text_path = project_root / "statics" / "IntroductionToAnaesthesia.txt"
-# pdf = project_root / "statics" / "IntroductionToAnaesthesia.pdf"
+# text_path = project_root / "text_files" / "test_document_1.txt"
+# pdf = project_root / "statics" / "test_document_1.pdf"
 
 
 @pytest.fixture
 def pdf_path():
     return (
-        project_root / "statics" / "IntroductionToAnaesthesia.pdf",
-        project_root / "statics" / "IntroductionToAnaesthesia.txt"
+        project_root / "statics" / "test_document_7.pdf",
+        project_root / "text_files" / "test_document_7.txt"
     )
 
 def compare_texts(extracted_text: str, real_text_path: Path):
@@ -82,7 +57,7 @@ def test_compare_extraction_accuracy(pdf_path):
                 data_org += " " + t + " "
 
         data_org = cleaning(data_org).lower().replace("perenne hoorsa stellt sich vor", "sehr geehrte frau elli test,")
-        data_org = data_org.replace("–", "").replace("- ", "").replace(".", "").replace(":", "").replace("/", " ")
+        data_org = data_org.replace("–", "").replace("- ", "").replace(".", "").replace(":", "").replace("/", " ").lower()
 
         print(data_org)
         accuracy_org_real, loss_org_real = compare_texts(data_org, text_path)

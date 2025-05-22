@@ -168,4 +168,5 @@ def decode_image(obj) -> Image.Image | None:
             return None
 
     except Exception as e:
-        logging.error(f"Error decoding image: {str(e)}")
+        # logging.error(f"Error decoding image: {str(e)}")
+        pass
